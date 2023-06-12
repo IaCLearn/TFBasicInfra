@@ -81,6 +81,50 @@ resource "azurerm_virtual_machine" "sqlvm" {
   
 }
 
+resource "azurerm_virtual_machine_extension" "vm_extension_modify_fw" {
+   
+    name = "vm_modify_fw"
+    virtual_machine_id = azurerm_virtual_machine.sqlvm.id
+    publisher = "Microsoft.Compute"
+    type = "CustomScriptExtension"
+    type_handler_version = "1.8"
+    auto_upgrade_minor_version = true
+    settings = <<SETTINGS
+    {
+    "commandToExecute": "powershell Set-NetFirewallProfile -Profile Domain -Enabled False"
+    }
+    SETTINGS
+
+     depends_on = [
+     azurerm_virtual_machine.sqlvm, azurerm_mssql_virtual_machine.azurerm_sqlvmmanagement
+    ]
+}
+
+resource "azurerm_virtual_machine_extension" "domjoin" {
+ 
+name = "domjoin"
+virtual_machine_id = azurerm_virtual_machine.sqlvm.id
+publisher = "Microsoft.Compute"
+type = "JsonADDomainExtension"
+type_handler_version = "1.3"
+
+settings = <<SETTINGS
+{
+"Name": "phebsix.com",
+"User": "phebsix.com\\localadmin",
+"Restart": "true",
+"Options": "3"
+}
+SETTINGS
+protected_settings = <<PROTECTED_SETTINGS
+{
+"Password": "${var.vm_dompassword}"
+}
+PROTECTED_SETTINGS
+ depends_on = [azurerm_virtual_machine.sqlvm,azurerm_mssql_virtual_machine.azurerm_sqlvmmanagement,azurerm_virtual_machine_extension.vm_extension_modify_fw]
+}
+
+
 resource "azurerm_mssql_virtual_machine" "azurerm_sqlvmmanagement" {
 
   virtual_machine_id               = azurerm_virtual_machine.sqlvm.id
@@ -112,4 +156,6 @@ resource "azurerm_mssql_virtual_machine" "azurerm_sqlvmmanagement" {
     }
 
   }
+
 }
+

@@ -23,10 +23,10 @@ variable "sql_vmname" {
   description = "name of the SQL Virtual Machine."
 }
 
-# variable "vm_admin_password" {
-#   description = "Admin Password for the VM's"
-#   sensitive   = true
-# }
+variable "vm_dompassword" {
+  description = "Admin Password for the VM's"
+  sensitive   = true
+}
 
 variable "vm_size_sql" {
   description = "VM Size SQL Server"

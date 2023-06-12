@@ -1,4 +1,4 @@
-module "vnet_cscabilis" {
+module "vnet_md" {
   source                      = "./modules/vnet"
   name                        = var.vnet_name
   location                    = var.location
@@ -17,7 +17,7 @@ module "vnet_cscabilis" {
 
 
 
-module "sqlvm_cscabilis" {
+module "sqlvm_md" {
 source = "./modules/VM"
 omsapprg_name=var.omsapprg_name
 sql_vmname=var.sql_vmname
@@ -32,7 +32,8 @@ sqllogfilepath=var.sqllogfilepath
 sqldatafilepath=var.sqldatafilepath
 vm_size_sql=var.vm_size_sql
 environment = var.environment
-existingsnetid=module.vnet_cscabilis.db_subnet_id
+existingsnetid=module.vnet_md.db_subnet_id
+vm_dompassword=var.vm_dompassword
 
 }
 

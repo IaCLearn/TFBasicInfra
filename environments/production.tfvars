@@ -13,8 +13,8 @@ app_nsg_name="app_nsg"
 environment = "production"
 dnsservers="10.0.0.4"
 
-# SQL VM
-omsapprg_name="omscscapp"
+# SQL VM creation
+omsapprg_name="sqlvmsrg"
 sql_vmname="sqlvm01"
 publisher_sql="MicrosoftSQLServer"
 offer_sql="sql2019-ws2019"
@@ -28,3 +28,5 @@ sqldatafilepath="G:\\Data"
 vm_size_sql="Standard_DS3_v2"
 
  
+ #common variables
+ vm_dompassword="Password12$$"

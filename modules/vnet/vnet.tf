@@ -144,6 +144,8 @@ resource "azurerm_subnet_route_table_association" "db_assos" {
   subnet_id      = azurerm_subnet.db_subnet.id
   route_table_id = azurerm_route_table.RT_OnPrem.id
 }
+
+
 #peering new virtual network to existing hub section
 data "azurerm_virtual_network" "existinghubnetwork" {
   name                = "advnet"
@@ -160,7 +162,7 @@ resource "azurerm_virtual_network_peering" "hub-spoke1-peer" {
     allow_forwarded_traffic   = true
     allow_gateway_transit     = false
     use_remote_gateways       = false
-    depends_on = [azurerm_virtual_network.virtual_network]
+    depends_on = [azurerm_virtual_network.virtual_network,azurerm_network_security_group.nsg_sql,azurerm_network_security_group.nsg_app]
 }
 
 
@@ -173,5 +175,5 @@ resource "azurerm_virtual_network_peering" "spoke1-hub-peer" {
     allow_forwarded_traffic = true
     allow_gateway_transit   = false
     use_remote_gateways     =false
-    depends_on = [azurerm_virtual_network.virtual_network]
+    depends_on = [azurerm_virtual_network.virtual_network,azurerm_network_security_group.nsg_sql,azurerm_network_security_group.nsg_app]
 }

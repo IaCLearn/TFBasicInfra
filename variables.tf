@@ -60,10 +60,10 @@ variable "environment" {
   description = "Environment"
 }
 
-# variable "vm_admin_password" {
-#   description = "Admin Password for the VM's"
-#   sensitive   = true
-# }
+variable "vm_dompassword" {
+  description = "Domain Admin Password for the VM's"
+  sensitive   = true
+}
 
 # VM Variables
 

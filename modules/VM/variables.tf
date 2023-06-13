@@ -1,6 +1,12 @@
-variable "existingsnetid" {
+variable "existingdbsnetid" {
 type=string
-description="Existing Subnet ID"
+description="Existing db Subnet ID"
+
+}
+
+variable "existingappsnetid" {
+type=string
+description="Existing db Subnet ID"
 
 }
 
@@ -16,6 +22,16 @@ variable "environment" {
 
 variable "location" {
   default = "canadacentral"
+}
+
+variable "appvmcount" {
+  type = number
+  description = "number of vms to be created"
+}
+
+variable "appvm_names" {
+  type    = string
+
 }
 
 variable "sql_vmname" {
@@ -59,17 +75,48 @@ variable "sqldatafilepath"{
   description = "SQL data file path"
 }
 variable "sqllogfilepath"{
+
+   type=string
   description = "SQL log file path"
 }
 variable "publisher_sql"{
   description = "image publisher"
 }
 variable "offer_sql" {
+   type=string
   description = "image offer"
 }
 variable "sku_sql"{
+   type=string
   description = "sku of the image"
 }
 variable "image_version_sql" {
+  type=string
   description = "version for the image"
 }
+
+variable "publisher_windows"{
+  
+  type = string
+
+  description = "version of windows"
+}
+
+variable "offer_windows" {
+
+  type = string
+  description = "offering version of windows"
+}
+    
+variable "sku_windows" {
+  type = string
+  description="Windows version sku"
+}
+variable "version_windows" {
+
+  type = string
+
+  description = "version of windows like latest"
+  
+}
+ 

@@ -2,7 +2,7 @@ variable "location" {
   type        = string
   description = "Location of Resources"
 }
-
+#Virtual Network Variables
 variable "vnet_name" {
   type        = string
   description = "Virtual Network Name"
@@ -67,15 +67,16 @@ variable "vm_dompassword" {
 
 # VM Variables
 
+variable "appvmcount" {
+  type=number
+  description = "number of vms to be created"
+}
+
 variable "omsapprg_name" {
     type=string
     description="The name of the resource for the OMS application"
 }
-# variable "existingsnetid" {
-# type=string
-# description="Existing Subnet ID"
 
-# }
 variable "sql_vmname" {
     type = string
   description = "name of the SQL Virtual Machine. "
@@ -147,4 +148,37 @@ variable "image_version_sql" {
 
 variable "dnsservers"{
 description="dns server(s) for environment"
+}
+
+#Windows VM Variables
+
+
+variable "publisher_windows"{
+  
+  type = string
+
+  description = "version of windows"
+}
+
+variable "offer_windows" {
+
+  type = string
+  description = "offering version of windows"
+}
+    
+variable "sku_windows" {
+  type = string
+  description="Windows version sku"
+}
+variable "version_windows" {
+
+  type = string
+
+  description = "version of windows like latest"
+  
+}
+ 
+ variable "appvm_names" {
+  type    = string
+description = "name of the web app servers"
 }

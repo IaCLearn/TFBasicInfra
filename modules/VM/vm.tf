@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "vm_resource_group" {
   }
 }
 
-
+#sql vm creation single machine
 resource "azurerm_network_interface" "db-nic" {
   name                = "${var.sql_vmname}-db-nic"
   location            = azurerm_resource_group.vm_resource_group.location
@@ -15,7 +15,7 @@ resource "azurerm_network_interface" "db-nic" {
 
   ip_configuration {
     name                          = "${var.sql_vmname}-IP"
-    subnet_id                     = var.existingsnetid
+    subnet_id     =var.existingdbsnetid
     private_ip_address_allocation = "Dynamic"
   }
 }
@@ -81,6 +81,8 @@ resource "azurerm_virtual_machine" "sqlvm" {
   
 }
 
+#disable domain firewall for domain activities
+
 resource "azurerm_virtual_machine_extension" "vm_extension_modify_fw" {
    
     name = "vm_modify_fw"
@@ -100,7 +102,9 @@ resource "azurerm_virtual_machine_extension" "vm_extension_modify_fw" {
     ]
 }
 
-resource "azurerm_virtual_machine_extension" "domjoin" {
+#join sqlvm to domain
+
+resource "azurerm_virtual_machine_extension" "sqldomjoin" {
  
 name = "domjoin"
 virtual_machine_id = azurerm_virtual_machine.sqlvm.id
@@ -124,7 +128,7 @@ PROTECTED_SETTINGS
  depends_on = [azurerm_virtual_machine.sqlvm,azurerm_mssql_virtual_machine.azurerm_sqlvmmanagement,azurerm_virtual_machine_extension.vm_extension_modify_fw]
 }
 
-
+#SQL Management for Azure SQL 
 resource "azurerm_mssql_virtual_machine" "azurerm_sqlvmmanagement" {
 
   virtual_machine_id               = azurerm_virtual_machine.sqlvm.id
@@ -159,3 +163,99 @@ resource "azurerm_mssql_virtual_machine" "azurerm_sqlvmmanagement" {
 
 }
 
+#Windows Server VM
+
+
+# Define the virtual machines
+resource "azurerm_network_interface" "app-nic" {
+  count               = "${var.appvmcount}"
+  name                = "${var.appvm_names}${count.index}-nic"
+  resource_group_name = azurerm_resource_group.vm_resource_group.name
+  location            =azurerm_resource_group.vm_resource_group.location
+
+  ip_configuration {
+    name                          = "${var.appvm_names}${count.index}-ipconfig"
+      subnet_id                     = var.existingappsnetid
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+resource "azurerm_virtual_machine" "winvm" {
+  count                = "${var.appvmcount}"
+  name                 = "${var.appvm_names}${count.index}"
+   resource_group_name = azurerm_resource_group.vm_resource_group.name
+  location            =azurerm_resource_group.vm_resource_group.location
+  network_interface_ids = [azurerm_network_interface.app-nic[count.index].id]
+  vm_size              = "Standard_DS2_v2"
+
+  storage_image_reference {
+    publisher = var.publisher_windows
+    offer     = var.offer_windows
+    sku       = var.sku_windows
+    version   = var.version_windows
+  }
+
+  storage_os_disk {
+    name              = "${var.appvm_names}${count.index}-osdisk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+
+  os_profile {
+    computer_name  = "${var.appvm_names}${count.index}"
+    admin_username = var.sql_vmusername
+    admin_password = var.sqladminpwd
+  }
+ os_profile_windows_config {
+    timezone           = "UTC"
+    provision_vm_agent = true
+  }
+   depends_on = [
+     azurerm_virtual_machine.sqlvm, azurerm_mssql_virtual_machine.azurerm_sqlvmmanagement, azurerm_virtual_machine_extension.sqldomjoin
+    ]
+}
+
+
+resource "azurerm_virtual_machine_extension" "winvm_extension_modify_fw" {
+    count= "${var.appvmcount}"
+    name = "vm_modify_fw"
+    virtual_machine_id = azurerm_virtual_machine.winvm[count.index].id
+    publisher = "Microsoft.Compute"
+    type = "CustomScriptExtension"
+    type_handler_version = "1.8"
+    auto_upgrade_minor_version = true
+    settings = <<SETTINGS
+    {
+    "commandToExecute": "powershell Set-NetFirewallProfile -Profile Domain -Enabled False"
+    }
+    SETTINGS
+
+     depends_on = [
+   azurerm_virtual_machine.winvm
+    ]
+}
+
+resource "azurerm_virtual_machine_extension" "windomjoin" {
+ count = "${var.appvmcount}"
+name = "domjoin"
+virtual_machine_id =  azurerm_virtual_machine.winvm[count.index].id
+publisher = "Microsoft.Compute"
+type = "JsonADDomainExtension"
+type_handler_version = "1.3"
+
+settings = <<SETTINGS
+{
+"Name": "phebsix.com",
+"User": "phebsix.com\\localadmin",
+"Restart": "true",
+"Options": "3"
+}
+SETTINGS
+protected_settings = <<PROTECTED_SETTINGS
+{
+"Password": "${var.vm_dompassword}"
+}
+PROTECTED_SETTINGS
+ depends_on = [azurerm_virtual_machine.winvm,azurerm_virtual_machine_extension.winvm_extension_modify_fw]
+}

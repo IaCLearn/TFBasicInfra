@@ -5,6 +5,7 @@ variable "location" {
   default = "canadacentral"
 }
 
+
 variable "network_address_space" {
 }
 

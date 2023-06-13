@@ -32,8 +32,15 @@ sqllogfilepath=var.sqllogfilepath
 sqldatafilepath=var.sqldatafilepath
 vm_size_sql=var.vm_size_sql
 environment = var.environment
-existingsnetid=module.vnet_md.db_subnet_id
+existingdbsnetid=module.vnet_md.db_subnet_id
 vm_dompassword=var.vm_dompassword
+existingappsnetid = module.vnet_md.app_subnet_id
+publisher_windows = var.publisher_windows
+offer_windows =var.offer_windows
+sku_windows = var.sku_windows
+version_windows = var.version_windows
+appvmcount = var.appvmcount
+appvm_names = var.appvm_names
 
 }
 

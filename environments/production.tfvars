@@ -18,7 +18,7 @@ omsapprg_name="sqlvmsrg"
 sql_vmname="sqlvm01"
 publisher_sql="MicrosoftSQLServer"
 offer_sql="sql2019-ws2019"
-sku_sql="standard"
+sku_sql="SQLDEV-gen2"
 image_version_sql="latest"
 sql_vmusername="sqladmin"
 sqladmin="sqladmin"
@@ -26,7 +26,12 @@ sqladminpwd="P@$$w0rd1234!"
 sqllogfilepath="F:\\Logs"
 sqldatafilepath="G:\\Data"
 vm_size_sql="Standard_DS3_v2"
-
+appvmcount=2
+publisher_windows = "MicrosoftWindowsServer"
+offer_windows ="WindowsServer"
+sku_windows = "2019-Datacenter"
+version_windows = "latest"
+appvm_names = "WebApp"
  
  #common variables
  vm_dompassword="Password12$$"

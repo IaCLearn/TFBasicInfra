@@ -52,3 +52,28 @@ module "keyvault_md" {
   kvsku_name = var.kvsku_name
   depends_on = [ module.sqlvm_md ]
 }
+
+module "appgw_md"{
+source="./modules/applicationgateway"
+backend_address_pool_name=var.backend_address_pool_name
+frontend_port_name=var.frontend_port_name
+http_setting_name=var.http_setting_name
+listener_name=var.listener_name
+request_routing_rule_name=var.request_routing_rule_name
+appgwipconfigname=var.appgwpip
+frontend_ip_configuration_name=var.frontend_ip_configuration_name
+appgwname=var.appgwname
+appgwpip=var.appgwpip
+existingappgwsubnetid = module.vnet_md.appgw_subnet_id
+  existingrgname=var.existingrgname
+  depends_on = [ module.sqlvm_md ]
+}
+
+module "redishcache_md" {
+  source = "./modules/rediscache"
+  capacity= var.capacity
+  redisfamily=var.redisfamily
+  sku_name=var.sku_name
+  existingrgname=var.existingrgname
+  depends_on = [ module.sqlvm_md ]
+}

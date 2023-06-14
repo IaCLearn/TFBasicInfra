@@ -31,10 +31,14 @@ variable "existingappgwsubnetid"{
 
 }
 
-variable "frontend_ip_configuration_name" {
+variable "appgwname"{
+
+}
+
+
+variable "appgwpip" {
   
 }
 
-variable "appgwname"{
-
+variable "existingrgname" {
 }

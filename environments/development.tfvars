@@ -36,20 +36,24 @@ appvm_names = "WebApp"
  
  #common variables
  vm_dompassword="Password12$$"
-
- #keyvault variables
 existingrgname="sqlvmsrg"
+ #keyvault variables
+
 kvname = "devkeyvault001"
 kvsku_name="standard"
 
 #application gateway variables
 backend_address_pool_name="myBackendPool"
 frontend_port_name="myFrontendPort"
-frontend_ip_configuration_name="myAGIPConfig"
 http_setting_name="myHTTPsetting"
 listener_name="myListener"
 request_routing_rule_name="myRoutingRule"
-appgwipconfigname=
-existingappgwsubnetid=
-frontend_ip_configuration_name=
-appgwname=
+appgwipconfigname="my-gateway-ip-configuration"
+frontend_ip_configuration_name="myAGIPConfig"
+appgwname="myAppGateway"
+appgwpip="myAGPublicIPAddress"
+
+#Azure Redis Cache configuration variable
+capacity=2
+redisfamily="C"
+sku_name="Standard"

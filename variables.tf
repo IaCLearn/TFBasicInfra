@@ -236,18 +236,25 @@ type = string
 description = "IP configuration nmae"
 
 }
-variable "existingappgwsubnetid"{
-type = string
-description = "existing subnet for application gateway"
-}
-
-variable "frontend_ip_configuration_name" {
-  type = string
-  description = "front ip configuration name"
-  
-}
 
 variable "appgwname"{
     type=string
     description = "application gateway name"
 }
+
+variable "appgwpip" {
+  
+}
+
+#Azure redis cache
+  variable "capacity" {
+    
+  }
+
+  variable "redisfamily" {
+    
+  }
+
+  variable "sku_name" {
+    
+  }

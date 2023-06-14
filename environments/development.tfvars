@@ -1,5 +1,6 @@
 # Virtual Network
-vnet_name                   = "productiontamops-vnet"
+vnetrgname="devvnetrg"
+vnet_name                   = "dev-vnet"
 network_address_space       = "192.168.0.0/16"
 db_subnet_address_prefix   = "192.168.0.0/24"
 db_subnet_address_name     = "db"
@@ -10,7 +11,7 @@ app_subnet_address_name   = "app"
 location="canadacentral"
 sql_nsg_name="sql_nsg"
 app_nsg_name="app_nsg"
-environment = "production"
+environment = "Development"
 dnsservers="10.0.0.4"
 
 # SQL VM creation
@@ -35,3 +36,20 @@ appvm_names = "WebApp"
  
  #common variables
  vm_dompassword="Password12$$"
+
+ #keyvault variables
+existingrgname="sqlvmsrg"
+kvname = "devkeyvault001"
+kvsku_name="standard"
+
+#application gateway variables
+backend_address_pool_name="myBackendPool"
+frontend_port_name="myFrontendPort"
+frontend_ip_configuration_name="myAGIPConfig"
+http_setting_name="myHTTPsetting"
+listener_name="myListener"
+request_routing_rule_name="myRoutingRule"
+appgwipconfigname=
+existingappgwsubnetid=
+frontend_ip_configuration_name=
+appgwname=

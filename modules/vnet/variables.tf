@@ -1,4 +1,8 @@
-variable "name" {
+variable "vnetrgname" {
+}
+
+variable "vnet_name" {
+  
 }
 
 variable "location" {

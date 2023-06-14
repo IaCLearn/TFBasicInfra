@@ -1,6 +1,7 @@
 module "vnet_md" {
   source                      = "./modules/vnet"
-  name                        = var.vnet_name
+  vnetrgname = var.vnetrgname
+  vnet_name                      = var.vnet_name
   location                    = var.location
   network_address_space       = var.network_address_space
   app_subnet_address_prefix   = var.app_subnet_address_prefix
@@ -18,7 +19,7 @@ module "vnet_md" {
 
 
 module "sqlvm_md" {
-source = "./modules/VM"
+source = "./modules/vm"
 omsapprg_name=var.omsapprg_name
 sql_vmname=var.sql_vmname
 publisher_sql=var.publisher_sql
@@ -44,3 +45,10 @@ appvm_names = var.appvm_names
 
 }
 
+module "keyvault_md" {
+  source = "./modules/keyvault"
+  existingrgname=var.existingrgname
+  kvname = var.kvname
+  kvsku_name = var.kvsku_name
+  depends_on = [ module.sqlvm_md ]
+}

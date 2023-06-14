@@ -2,6 +2,11 @@ variable "location" {
   type        = string
   description = "Location of Resources"
 }
+variable "vnetrgname" {
+  type = string
+  description = "Virtual Network Rg names"
+  
+}
 #Virtual Network Variables
 variable "vnet_name" {
   type        = string
@@ -98,22 +103,7 @@ variable "vm_data_disk_delete_flag"{
   description = "Should the Data Disks (either the Managed Disks / VHD Blobs) be deleted when the Virtual Machine is destroyed?"
   default     = "true"
 }
-# variable "image_publisher"{
-#   type        = string
-#   description = "image publisher"
-# }
-# variable "offer_app"{
-#   type        = string
-#   description = "image offer"
-# }
-# variable "sku_app"{
-#   type        = string
-#   description = "sku of the image"
-# }
-# variable "image_version_app"{
-#   type        = string
-#   description = "version for the image"
-# }
+
 variable "sqladminpwd"{
   description = "SQL admin password"
   sensitive   = true
@@ -181,4 +171,83 @@ variable "version_windows" {
  variable "appvm_names" {
   type    = string
 description = "name of the web app servers"
+}
+
+# Keyvault variables
+
+variable "kvsku_name" {
+    type    = string
+description = "sku for keyvault"
+}
+
+variable "kvname" {
+      type    = string
+description = "Keyvault name"
+}
+
+variable "existingrgname" {
+
+  type    = string
+description = "existing resource group"
+}
+
+
+#Application Gateway Variables
+
+variable "backend_address_pool_name" {
+    
+    type =string
+    description = "backend pool address name"
+
+}
+
+variable "frontend_port_name" {
+  type = string
+    
+    description = "front end port name"
+}
+
+variable "frontend_ip_configuration_name" {
+  type = string
+  description = "frontend ip configuration name"
+    
+}
+
+variable "http_setting_name" {
+  type = string
+  description = "http setting name"
+    
+}
+
+variable "listener_name" {
+  type = string
+    description = "listener name"
+}
+
+variable "request_routing_rule_name" {
+  type = string
+  description = "Routing rule name"
+   
+}
+
+
+variable "appgwipconfigname"{
+type = string
+description = "IP configuration nmae"
+
+}
+variable "existingappgwsubnetid"{
+type = string
+description = "existing subnet for application gateway"
+}
+
+variable "frontend_ip_configuration_name" {
+  type = string
+  description = "front ip configuration name"
+  
+}
+
+variable "appgwname"{
+    type=string
+    description = "application gateway name"
 }

@@ -20,7 +20,7 @@ module "vnet_md" {
 
 module "sqlvm_md" {
 source = "./modules/vm"
-omsapprg_name=var.omsapprg_name
+apprg_name=var.apprg_name
 sql_vmname=var.sql_vmname
 publisher_sql=var.publisher_sql
 offer_sql=var.offer_sql

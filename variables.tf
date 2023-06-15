@@ -77,9 +77,9 @@ variable "appvmcount" {
   description = "number of vms to be created"
 }
 
-variable "omsapprg_name" {
+variable "apprg_name" {
     type=string
-    description="The name of the resource for the OMS application"
+    description="Resource Group name for the application"
 }
 
 variable "sql_vmname" {

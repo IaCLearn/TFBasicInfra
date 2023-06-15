@@ -15,22 +15,22 @@ resource "azurerm_key_vault" "keyvault" {
 
   sku_name = var.kvsku_name
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
+  # access_policy {
+  #   tenant_id = data.azurerm_client_config.current.tenant_id
+  #   object_id = data.azurerm_client_config.current.object_id
 
-    key_permissions = [
-      "Get",
-    ]
+  #   key_permissions = [
+  #     "Get",
+  #   ]
 
-    secret_permissions = [
-      "Get",
-      "Set",
-      "List"
-    ]
+  #   secret_permissions = [
+  #     "Get",
+  #     "Set",
+  #     "List"
+  #   ]
 
-    storage_permissions = [
-      "Get",
-    ]
-  }
+  #   storage_permissions = [
+  #     "Get",
+  #   ]
+  # }
 }

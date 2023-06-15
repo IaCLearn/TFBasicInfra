@@ -15,7 +15,7 @@ environment = "Development"
 dnsservers="10.0.0.4"
 
 # SQL VM creation
-omsapprg_name="sqlvmsrg"
+apprg_name="sqlvmsrg"
 sql_vmname="sqlvm01"
 publisher_sql="MicrosoftSQLServer"
 offer_sql="sql2019-ws2019"

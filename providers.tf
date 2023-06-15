@@ -22,8 +22,6 @@ resource_group_name  = "tfstate"
 
 provider "azurerm" {
   features {}
-
- 
 }
 
 data "azurerm_client_config" "current" {}

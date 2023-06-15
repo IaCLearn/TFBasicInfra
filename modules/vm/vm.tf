@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "vm_resource_group" {
-  name     = "${var.omsapprg_name}-rg"
+  name     = "${var.apprg_name}-rg"
   location = var.location
   
   tags = {

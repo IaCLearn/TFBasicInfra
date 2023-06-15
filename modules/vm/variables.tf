@@ -48,12 +48,16 @@ variable "vm_size_sql" {
   description = "VM Size SQL Server"
 }
 
-variable "sql_vmusername"{
-
-description= "SQL VM user name"
+variable "vmusername"{
+type=string
+description="VM user name"
 
 }
 
+variable "vmpassword"{
+type=string
+description="VM user pass"
+}
 variable "vm_os_disk_delete_flag"{
   description = "Should the OS Disk (either the Managed Disk / VHD Blob) be deleted when the Virtual Machine is destroyed?"
   default     = "true"

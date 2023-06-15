@@ -68,8 +68,8 @@ resource "azurerm_virtual_machine" "sqlvm" {
   }
 
   os_profile {
-    admin_password = var.sqladminpwd
-    admin_username = var.sql_vmusername
+    admin_password = var.vmpassword
+    admin_username = var.vmusername
     computer_name  = var.sql_vmname
   }
 
@@ -163,9 +163,7 @@ resource "azurerm_mssql_virtual_machine" "azurerm_sqlvmmanagement" {
 
 }
 
-#Windows Server VM
-
-
+#Windows Server for app web VM
 # Define the virtual machines
 resource "azurerm_network_interface" "app-nic" {
   count               = "${var.appvmcount}"
@@ -204,8 +202,8 @@ resource "azurerm_virtual_machine" "winvm" {
 
   os_profile {
     computer_name  = "${var.appvm_names}${count.index}"
-    admin_username = var.sql_vmusername
-    admin_password = var.sqladminpwd
+    admin_password = var.vmpassword
+    admin_username = var.vmusername
   }
  os_profile_windows_config {
     timezone           = "UTC"

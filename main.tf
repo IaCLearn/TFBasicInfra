@@ -18,7 +18,7 @@ module "vnet_md" {
 
 
 
-module "sqlvm_md" {
+module "vm_md" {
 source = "./modules/vm"
 apprg_name=var.apprg_name
 sql_vmname=var.sql_vmname
@@ -26,7 +26,8 @@ publisher_sql=var.publisher_sql
 offer_sql=var.offer_sql
 sku_sql=var.sku_sql
 image_version_sql=var.image_version_sql
-sql_vmusername= var.sql_vmusername
+vmusername= var.vmusername
+vmpassword = var.vmpassword
 sqladminpwd=var.sqladminpwd
 sqladmin=var.sqladmin
 sqllogfilepath=var.sqllogfilepath
@@ -50,7 +51,7 @@ module "keyvault_md" {
   existingrgname=var.existingrgname
   kvname = var.kvname
   kvsku_name = var.kvsku_name
-  depends_on = [ module.sqlvm_md ]
+  depends_on = [ module.vm_md ]
 }
 
 module "appgw_md"{
@@ -66,7 +67,7 @@ appgwname=var.appgwname
 appgwpip=var.appgwpip
 existingappgwsubnetid = module.vnet_md.appgw_subnet_id
   existingrgname=var.existingrgname
-  depends_on = [ module.sqlvm_md ]
+  depends_on = [ module.vm_md ]
 }
 
 module "redishcache_md" {
@@ -75,5 +76,5 @@ module "redishcache_md" {
   redisfamily=var.redisfamily
   sku_name=var.sku_name
   existingrgname=var.existingrgname
-  depends_on = [ module.sqlvm_md ]
+  depends_on = [ module.vm_md ]
 }

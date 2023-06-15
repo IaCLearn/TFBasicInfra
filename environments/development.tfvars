@@ -21,12 +21,15 @@ publisher_sql="MicrosoftSQLServer"
 offer_sql="sql2019-ws2019"
 sku_sql="SQLDEV-gen2"
 image_version_sql="latest"
-sql_vmusername="sqladmin"
-sqladmin="sqladmin"
-sqladminpwd="P@$$w0rd1234!"
+vmusername="localadmin"
+sqladmin="localadmin"
+vmpassword="Password12$$"
+sqladminpwd="Password12$$"
 sqllogfilepath="F:\\Logs"
 sqldatafilepath="G:\\Data"
 vm_size_sql="Standard_DS3_v2"
+
+#Web app vm creation
 appvmcount=2
 publisher_windows = "MicrosoftWindowsServer"
 offer_windows ="WindowsServer"

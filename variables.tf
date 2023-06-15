@@ -86,10 +86,15 @@ variable "sql_vmname" {
     type = string
   description = "name of the SQL Virtual Machine. "
 }
-variable "sql_vmusername"{
+variable "vmusername"{
 type=string
-description="SQL VM user name"
+description="VM user name"
 
+}
+
+variable "vmpassword"{
+type=string
+description="VM user pass"
 }
 variable "vm_size_sql" {
   type        = string

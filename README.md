@@ -78,8 +78,9 @@ cd TFBasicInfra/
     client_secret     = ""
     }
     ```
+4. Update the variable values in the tfvars files
 
-3. Run the following terraform commands
+5. Run the following terraform commands
 
 ```
 terraform init

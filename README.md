@@ -61,7 +61,7 @@ git clone https://github.com/IaCLearn/TFBasicInfra.git
 ```
 cd TFBasicInfra/
 ```
-3. Edit the providers.tf file
+3. Edit the providers.tf file. To create the state file storage account in Azure, review this [Link](https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli)
      ```
      backend "azurerm" {
      resource_group_name  = ""
@@ -105,3 +105,8 @@ cd TDBasicInfra
 terraform destroy -auto-approve -input=false -var-file="environments/development.tfvars"
 ```
 
+## References
+
+- Terraform Azure Provider Docs [Link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
+
+- Terraform on Azure Documentation. Microsoft [Link](https://learn.microsoft.com/en-us/azure/developer/terraform/)

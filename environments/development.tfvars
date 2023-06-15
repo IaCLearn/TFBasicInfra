@@ -34,11 +34,11 @@ sku_windows = "2019-Datacenter"
 version_windows = "latest"
 appvm_names = "WebApp"
  
- #common variables
- vm_dompassword="Password12$$"
+#common variables
+vm_dompassword="Password12$$"
 existingrgname="sqlvmsrg"
- #keyvault variables
 
+#keyvault variables
 kvname = "devkeyvault001"
 kvsku_name="standard"
 

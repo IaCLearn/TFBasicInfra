@@ -22,8 +22,9 @@ resource "azurerm_virtual_network" "virtual_network" {
 
 
 resource "azurerm_virtual_network_dns_servers" "spoke_dns" {
+  
   virtual_network_id = azurerm_virtual_network.virtual_network.id
-  dns_servers        = [var.dnsservers]
+  dns_servers        = var.dnsservers
 }
 
 resource "azurerm_subnet" "app_subnet" {

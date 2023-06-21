@@ -12,7 +12,7 @@ location="canadacentral"
 sql_nsg_name="sql_nsg"
 app_nsg_name="app_nsg"
 environment = "Development"
-dnsservers="10.0.0.4"
+dnsservers=["10.0.0.4","168.63.129.16","10.0.0.5"]
 
 # SQL VM creation
 apprg_name="sqlvmsrg"

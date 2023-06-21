@@ -143,6 +143,8 @@ variable "image_version_sql" {
 
 variable "dnsservers"{
 description="dns server(s) for environment"
+  type        = list(string)
+  default     = []
 }
 
 #Windows VM Variables

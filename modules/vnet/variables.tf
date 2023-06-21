@@ -44,5 +44,6 @@ variable "environment" {
 }
 
 variable "dnsservers"{
-
+  type        = list(string)
+  default     = []
 }

@@ -25,6 +25,17 @@ variable "appgw_subnet_address_prefix" {
 variable "appgw_subnet_address_name" {
 }
 
+variable "appbkend_subnet_address_prefix" {
+}
+
+variable "appbkend_subnet_address_name" {
+}
+
+variable "appbrst_subnet_address_prefix" {
+}
+
+variable "appbrst_subnet_address_name" {
+}
 
 variable "db_subnet_address_prefix" {
 }

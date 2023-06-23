@@ -3,7 +3,7 @@ data "azurerm_resource_group" "keyvault" {
 }
 # NOTE: the Name used for Redis needs to be globally unique
 resource "azurerm_redis_cache" "azredcache" {
-  name                = "errovam001"
+  name                = "errovam002"
  location                    = data.azurerm_resource_group.keyvault.location
   resource_group_name         = data.azurerm_resource_group.keyvault.name
   capacity            = var.capacity

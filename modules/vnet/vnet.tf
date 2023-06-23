@@ -49,6 +49,19 @@ resource "azurerm_subnet" "appgw_subnet" {
   address_prefixes = [var.appgw_subnet_address_prefix]
 }
 
+resource "azurerm_subnet" "appbkend_subnet" {
+  name = var.appbkend_subnet_address_name
+  resource_group_name  = azurerm_resource_group.vnet_resource_group.name
+  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  address_prefixes = [var.appbkend_subnet_address_prefix]
+}
+
+resource "azurerm_subnet" "appbrst_subnet" {
+  name = var.appbrst_subnet_address_name
+  resource_group_name  = azurerm_resource_group.vnet_resource_group.name
+  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  address_prefixes = [var.appbrst_subnet_address_prefix]
+}
 
 resource "azurerm_network_security_group" "nsg_sql" {
   name = var.sql_nsg_name

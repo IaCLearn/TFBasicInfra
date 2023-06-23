@@ -45,6 +45,29 @@ variable "appgw_subnet_address_prefix" {
   description = "AppGW Subnet Address Prefix"
 }
 
+variable "appbkend_subnet_address_prefix" {
+
+    type        = string
+  description = "Application backend Subnet Address Prefix"
+}
+
+variable "appbkend_subnet_address_name" {
+
+    type        = string
+  description = "Application backend Subnet Address name"
+}
+
+variable "appbrst_subnet_address_prefix" {
+
+    type        = string
+  description = "Application burst Subnet Address Prefix"
+}
+
+variable "appbrst_subnet_address_name" {
+    type        = string
+  description = "Application burst backend Subnet Address Prefix"
+}
+
 variable "appgw_subnet_address_name" {
   type        = string
   description = "AppGW Subnet Name"
@@ -265,3 +288,14 @@ variable "appgwpip" {
   variable "sku_name" {
     
   }
+
+  #storage variables
+  variable "containers_list" {
+  type = list
+  
+ }
+
+ variable "storage_list" {
+  type = list
+  
+ }

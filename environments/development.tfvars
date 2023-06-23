@@ -8,6 +8,11 @@ appgw_subnet_address_prefix = "192.168.1.0/24"
 appgw_subnet_address_name   = "appgw"
 app_subnet_address_prefix = "192.168.2.0/24"
 app_subnet_address_name   = "app"
+appbkend_subnet_address_prefix = "192.168.3.0/24"
+appbkend_subnet_address_name = "appbkend"
+appbrst_subnet_address_prefix = "192.168.4.0/24"
+appbrst_subnet_address_name = "appbrst"
+
 location="canadacentral"
 sql_nsg_name="sql_nsg"
 app_nsg_name="app_nsg"
@@ -60,3 +65,7 @@ appgwpip="myAGPublicIPAddress"
 capacity=2
 redisfamily="C"
 sku_name="Standard"
+
+#Azure Storage Account Configuration variables
+storage_list=["shols001","shols002","shols003"]
+containers_list=[{ name = "sa1container1", access_type = "private" }]

@@ -10,12 +10,24 @@ module "vnet_md" {
   db_subnet_address_name     = var.db_subnet_address_name
   appgw_subnet_address_prefix = var.appgw_subnet_address_prefix
   appgw_subnet_address_name   = var.appgw_subnet_address_name
+  appbkend_subnet_address_prefix = var.appbkend_subnet_address_prefix
+  appbkend_subnet_address_name = var.appbkend_subnet_address_name
+  appbrst_subnet_address_prefix = var.appbrst_subnet_address_prefix
+  appbrst_subnet_address_name = var.appbrst_subnet_address_name
   environment                 = var.environment
   sql_nsg_name=               var.sql_nsg_name
   app_nsg_name= var.app_nsg_name
   dnsservers=var.dnsservers
 }
 
+module "stgaccount_md" {
+  source = "./modules/storageaccounts"
+  storage_list = var.storage_list
+  containers_list = var.containers_list
+  existingrgname = var.existingrgname
+depends_on = [ module.vm_md ]
+  
+}
 
 
 module "vm_md" {

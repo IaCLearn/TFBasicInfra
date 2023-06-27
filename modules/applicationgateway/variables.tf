@@ -10,6 +10,9 @@ variable "frontend_ip_configuration_name" {
   
 }
 
+variable "private_frontend_ip_configuration_name" {
+  
+}
 variable "http_setting_name" {
    
 }
@@ -42,3 +45,8 @@ variable "appgwpip" {
 
 variable "existingrgname" {
 }
+
+variable "backendaddresspoolfqdns" {
+  type = list
+  
+ }

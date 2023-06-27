@@ -230,7 +230,9 @@ variable "backend_address_pool_name" {
     description = "backend pool address name"
 
 }
-
+variable "private_frontend_ip_configuration_name" {
+  
+}
 variable "frontend_port_name" {
   type = string
     
@@ -276,6 +278,13 @@ variable "appgwpip" {
   
 }
 
+
+variable "backendaddresspoolfqdns" {
+  type = list
+  
+ }
+
+
 #Azure redis cache
   variable "capacity" {
     
@@ -299,3 +308,31 @@ variable "appgwpip" {
   type = list
   
  }
+
+ #custom linux image variables
+
+variable "webbfecount" {
+  type = number
+  description = "number of vms to be created"
+}
+
+variable "webbfe_names" {
+  type    = string
+
+}
+variable "cstlinuxvmsize"{
+
+    type = string
+    description = "VM Size for linux Virtual Machine"
+}
+
+variable "source_image_id" {
+  type = string
+  description = "vm source image id"
+  
+}
+
+variable "brstvmrg_name" {
+    type=string
+    description="Resource Group name for the application"
+}

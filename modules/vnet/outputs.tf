@@ -4,6 +4,11 @@ output "app_subnet_id" {
 output "db_subnet_id" {
   value = azurerm_subnet.db_subnet.id
 }
+output "appbrst_subnet_id" {
+  value = azurerm_subnet.appbrst_subnet.id
+}
+
+
 
 output "appgw_subnet_id" {
   value = azurerm_subnet.appgw_subnet.id

@@ -1,9 +1,3 @@
-variable "existingdbsnetid" {
-type=string
-description="Existing db Subnet ID"
-
-}
-
 variable "existingappsnetid" {
 type=string
 description="Existing db Subnet ID"
@@ -34,18 +28,9 @@ variable "appvm_names" {
 
 }
 
-variable "sql_vmname" {
-    type= string
-  description = "name of the SQL Virtual Machine."
-}
-
 variable "vm_dompassword" {
   description = "Admin Password for the VM's"
   sensitive   = true
-}
-
-variable "vm_size_sql" {
-  description = "VM Size SQL Server"
 }
 
 variable "vmusername"{
@@ -67,37 +52,7 @@ variable "vm_data_disk_delete_flag"{
   default     = "true"
 }
 
-variable "sqladminpwd"{
-  description = "SQL admin password"
-  sensitive   = true
-}
-variable "sqladmin"{
-  description = "SQL admin username"
-  sensitive   = true
-}
-variable "sqldatafilepath"{
-  description = "SQL data file path"
-}
-variable "sqllogfilepath"{
 
-   type=string
-  description = "SQL log file path"
-}
-variable "publisher_sql"{
-  description = "image publisher"
-}
-variable "offer_sql" {
-   type=string
-  description = "image offer"
-}
-variable "sku_sql"{
-   type=string
-  description = "sku of the image"
-}
-variable "image_version_sql" {
-  type=string
-  description = "version for the image"
-}
 
 variable "publisher_windows"{
   

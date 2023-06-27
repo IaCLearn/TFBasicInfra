@@ -159,7 +159,10 @@ resource "azurerm_subnet_route_table_association" "db_assos" {
   route_table_id = azurerm_route_table.RT_OnPrem.id
 }
 
-
+resource "azurerm_subnet_route_table_association" "appbrst_assos" {
+  subnet_id      = azurerm_subnet.appbrst_subnet.id
+  route_table_id = azurerm_route_table.RT_OnPrem.id
+}
 #peering new virtual network to existing hub section
 data "azurerm_virtual_network" "existinghubnetwork" {
   name                = "advnet"

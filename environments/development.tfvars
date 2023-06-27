@@ -60,6 +60,8 @@ appgwipconfigname="my-gateway-ip-configuration"
 frontend_ip_configuration_name="myAGIPConfig"
 appgwname="myAppGateway"
 appgwpip="myAGPublicIPAddress"
+private_frontend_ip_configuration_name="myAGPrivateIPAddress"
+backendaddresspoolfqdns=["webApp0.phebsix.com","WebApp1.phebsix.com"]
 
 #Azure Redis Cache configuration variable
 capacity=2
@@ -69,3 +71,10 @@ sku_name="Standard"
 #Azure Storage Account Configuration variables
 storage_list=["shols001","shols002","shols003"]
 containers_list=[{ name = "sa1container1", access_type = "private" }]
+
+#Azure Linux VM 
+webbfecount=2
+webbfe_names="BrstWeb"
+cstlinuxvmsize="Standard_DS2_v2"
+source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/images/omsimg"
+brstvmrg_name="sqlvmsrg"

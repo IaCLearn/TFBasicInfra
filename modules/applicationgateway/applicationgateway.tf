@@ -2,6 +2,7 @@ data "azurerm_resource_group" "appgwrg" {
   name = "${var.existingrgname}-rg"
 }
 
+
 resource "azurerm_public_ip" "pip" {
   name                = var.appgwpip
    location   = data.azurerm_resource_group.appgwrg.location
@@ -35,10 +36,20 @@ resource "azurerm_application_gateway" "appgw" {
   frontend_ip_configuration {
     name                 = var.frontend_ip_configuration_name
     public_ip_address_id = azurerm_public_ip.pip.id
+   
+    
+  }
+   frontend_ip_configuration{
+    name = var.private_frontend_ip_configuration_name
+    subnet_id = var.existingappgwsubnetid
+    private_ip_address_allocation ="static"
+    private_ip_address = "192.168.1.10"
+    
   }
 
   backend_address_pool {
     name = var.backend_address_pool_name
+    fqdns = var.backendaddresspoolfqdns
   }
 
   backend_http_settings {
@@ -65,3 +76,5 @@ resource "azurerm_application_gateway" "appgw" {
     priority                   = 1
   }
 }
+
+

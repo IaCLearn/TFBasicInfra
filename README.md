@@ -78,9 +78,22 @@ cd TFBasicInfra/
     client_secret     = ""
     }
     ```
-4. Update the variable values in the tfvars files
+4. Update the Vnet.tf file in the vnet and add the subscription id for both the hub and spoke to enable vnet across vnet peering
+provider "azurerm" {
+  features {}
+ alias = "hubsubscription"
+ #hub subscription id with the hub vnet
+ subscription_id ="" 
+}
 
-5. Run the following terraform commands
+provider "azurerm" {
+  features {}
+  #spoke subscription id
+  subscription_id ="" 
+}
+5. Update the variable values in the tfvars files
+
+6. Run the following terraform commands
 
 ```
 terraform init

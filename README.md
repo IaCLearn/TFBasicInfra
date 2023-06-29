@@ -78,7 +78,7 @@ cd TFBasicInfra/
     client_secret     = ""
     }
     ```
-4. Update the Vnet.tf file in the vnet and add the subscription id for both the hub and spoke to enable vnet across vnet peering
+4. Update the Vnet.tf file in the vnet folder and add the subscription id for both the hub and spoke to enable vnet across vnet peering
 ```
 provider "azurerm" {
   features {}

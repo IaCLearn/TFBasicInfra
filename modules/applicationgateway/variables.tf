@@ -43,10 +43,19 @@ variable "appgwpip" {
   
 }
 
+variable "location" {
+  default = "canadacentral"
+}
+
+
 variable "existingrgname" {
 }
 
 variable "backendaddresspoolfqdns" {
   type = list
   
+ }
+
+ variable "appgwprivateip" {
+   
  }

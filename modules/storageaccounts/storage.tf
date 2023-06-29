@@ -3,14 +3,12 @@ locals {
     flat_list = setproduct(var.storage_list, var.containers_list)
 }
 
-data "azurerm_resource_group" "keyvault" {
-  name = "${var.existingrgname}-rg"
-}
+
 resource "azurerm_storage_account" "storage_account" {
   for_each = toset(var.storage_list) 
   name=each.value
-   location = data.azurerm_resource_group.keyvault.location
-  resource_group_name = data.azurerm_resource_group.keyvault.name
+   location = var.location
+  resource_group_name = var.existingrgname
   account_tier = "Standard"
   account_replication_type = "LRS"
 }

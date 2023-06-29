@@ -10,3 +10,6 @@ variable "containers_list" {
 
   variable "existingrgname" {
 }
+variable "location" {
+  default = "canadacentral"
+}

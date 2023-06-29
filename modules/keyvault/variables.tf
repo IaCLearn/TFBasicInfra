@@ -11,3 +11,7 @@ variable "kvname" {
 variable "kvsku_name" {
   
 }
+
+variable "location" {
+  default = "canadacentral"
+}

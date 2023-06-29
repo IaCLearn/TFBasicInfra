@@ -2,11 +2,11 @@ variable "location" {
   type        = string
   description = "Location of Resources"
 }
-variable "vnetrgname" {
-  type = string
-  description = "Virtual Network Rg names"
+# variable "vnetrgname" {
+#   type = string
+#   description = "Virtual Network Rg names"
   
-}
+# }
 #Virtual Network Variables
 variable "vnet_name" {
   type        = string
@@ -45,6 +45,11 @@ variable "appgw_subnet_address_prefix" {
   description = "AppGW Subnet Address Prefix"
 }
 
+variable "appgwprivateip" {
+   type = string
+   description = "Applicationg gateway private ip"
+ }
+
 variable "appbkend_subnet_address_prefix" {
 
     type        = string
@@ -73,6 +78,16 @@ variable "appgw_subnet_address_name" {
   description = "AppGW Subnet Name"
 }
 
+variable "pe_subnet_address_name" {
+  type =string
+  description = "private endpoint Subnet Name"
+}
+
+
+variable "pe_subnet_address_prefix" {
+  type = string
+  description = "private endpoint address prefix"
+}
 variable  "sql_nsg_name"{
    type        = string
   description = "NSG SQL Name"
@@ -119,9 +134,18 @@ variable "vmpassword"{
 type=string
 description="VM user pass"
 }
+#sql VM variable
+
 variable "vm_size_sql" {
-  type        = string
   description = "VM Size SQL Server"
+ default = "Standard_DS3_v2"
+ 
+}
+
+variable "vm_size_sqlmedium" {
+  description = "Medium VM Size SQL Server"
+  default="Standard_D8ds_v4"
+    
 }
 variable "vm_os_disk_delete_flag"{
   description = "Should the OS Disk (either the Managed Disk / VHD Blob) be deleted when the Virtual Machine is destroyed?"
@@ -335,4 +359,41 @@ variable "source_image_id" {
 variable "brstvmrg_name" {
     type=string
     description="Resource Group name for the application"
+}
+
+#variables for custom windows vm
+
+
+variable "appbkendvmrg_name" {
+    type=string
+    description="Resource Group name for the application"
+}
+
+variable "appbkendcount" {
+  type = number
+  description = "number of vms to be created"
+}
+
+variable "appbkend_names" {
+  type    = string
+
+}
+
+variable "cstwinvmsize"{
+
+    type = string
+    description = "VM Size for linux Virtual Machine"
+}
+
+variable "win_source_image_id" {
+  type = string
+  description = "vm source image id"
+  
+}
+
+#variable declaration for resource groups
+
+variable "resource_groups" {
+  type        = map(any)
+  description = "(Required) A list of Azure Resource Groups with locations and tags"
 }

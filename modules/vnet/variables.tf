@@ -37,6 +37,13 @@ variable "appbrst_subnet_address_prefix" {
 variable "appbrst_subnet_address_name" {
 }
 
+variable "pe_subnet_address_name" {
+  
+}
+
+variable "pe_subnet_address_prefix" {
+  
+}
 variable "db_subnet_address_prefix" {
 }
 

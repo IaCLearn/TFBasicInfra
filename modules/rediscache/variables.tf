@@ -13,3 +13,7 @@
 
   variable "existingrgname" {
 }
+
+variable "location" {
+  default = "canadacentral"
+}

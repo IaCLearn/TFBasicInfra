@@ -1,11 +1,9 @@
-data "azurerm_resource_group" "keyvault" {
-  name = "${var.existingrgname}-rg"
-}
+
 # NOTE: the Name used for Redis needs to be globally unique
 resource "azurerm_redis_cache" "azredcache" {
   name                = "errovam002"
- location                    = data.azurerm_resource_group.keyvault.location
-  resource_group_name         = data.azurerm_resource_group.keyvault.name
+ location                    = var.location
+  resource_group_name         = var.existingrgname
   capacity            = var.capacity
   family              = var.redisfamily
   sku_name            = var.sku_name

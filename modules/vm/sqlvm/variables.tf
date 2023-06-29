@@ -46,6 +46,14 @@ variable "vm_dompassword" {
 
 variable "vm_size_sql" {
   description = "VM Size SQL Server"
+ default = "Standard_DS3_v2"
+ 
+}
+
+variable "vm_size_sqlmedium" {
+  description = "Medium VM Size SQL Server"
+  default="Standard_D8ds_v4"
+    
 }
 
 variable "vmusername"{

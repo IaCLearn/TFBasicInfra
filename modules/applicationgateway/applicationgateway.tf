@@ -1,12 +1,7 @@
-data "azurerm_resource_group" "appgwrg" {
-  name = "${var.existingrgname}-rg"
-}
-
-
 resource "azurerm_public_ip" "pip" {
   name                = var.appgwpip
-   location   = data.azurerm_resource_group.appgwrg.location
-  resource_group_name= data.azurerm_resource_group.appgwrg.name
+   location   = var.location
+  resource_group_name= var.existingrgname
   allocation_method   = "Static"
   sku                 = "Standard"
 }
@@ -14,8 +9,8 @@ resource "azurerm_public_ip" "pip" {
 
 resource "azurerm_application_gateway" "appgw" {
   name = var.appgwname
-  location= data.azurerm_resource_group.appgwrg.location
-  resource_group_name= data.azurerm_resource_group.appgwrg.name
+  location   = var.location
+  resource_group_name= var.existingrgname
 
   sku {
     name     = "Standard_v2"
@@ -43,7 +38,7 @@ resource "azurerm_application_gateway" "appgw" {
     name = var.private_frontend_ip_configuration_name
     subnet_id = var.existingappgwsubnetid
     private_ip_address_allocation ="static"
-    private_ip_address = "192.168.1.10"
+    private_ip_address = var.appgwprivateip
     
   }
 

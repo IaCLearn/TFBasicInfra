@@ -1,20 +1,11 @@
-resource "azurerm_resource_group" "vm_resource_group" {
-  name     = "${var.brstvmrg_name}-rg"
-  location = var.location
-  
-  tags = {
-    Environment = var.environment
-  }
-}
-
 resource "azurerm_network_interface" "webbfe-nic" {
   count               = "${var.webbfecount}"
   name                = "${var.webbfe_names}${count.index}-nic"
-  resource_group_name = azurerm_resource_group.vm_resource_group.name
-  location            =azurerm_resource_group.vm_resource_group.location
+  location            = var.location
+  resource_group_name = var.brstvmrg_name
 
   ip_configuration {
-    name = "${var.webbfe_names}${count.index}-ipconfig"
+    name = "${var.webbfe_names}${count.index+1}-ipconfig"
     subnet_id = var.existingappbrstsnetid
     private_ip_address_allocation = "Dynamic"
   }
@@ -22,9 +13,9 @@ resource "azurerm_network_interface" "webbfe-nic" {
 
 resource "azurerm_linux_virtual_machine" "webbfevms" {
   count                 = var.webbfecount                               
-  name                  = "${var.webbfe_names}${count.index}"
- location            =azurerm_resource_group.vm_resource_group.location
-  resource_group_name   = azurerm_resource_group.vm_resource_group.name
+  name                  = "${var.webbfe_names}${count.index + 1}vm"
+ location            = var.location
+  resource_group_name = var.brstvmrg_name
   network_interface_ids = [azurerm_network_interface.webbfe-nic[count.index].id]
   size =var.cstlinuxvmsize
   os_disk {

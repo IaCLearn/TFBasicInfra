@@ -1,18 +1,19 @@
 # Virtual Network
-vnetrgname="devvnetrg"
+//vnetrgname="devvnetrg"
 vnet_name                   = "dev-vnet"
 network_address_space       = "192.168.0.0/16"
 db_subnet_address_prefix   = "192.168.0.0/24"
-db_subnet_address_name     = "db"
+db_subnet_address_name     = "dbsnet"
 appgw_subnet_address_prefix = "192.168.1.0/24"
-appgw_subnet_address_name   = "appgw"
+appgw_subnet_address_name   = "appgwsnet"
 app_subnet_address_prefix = "192.168.2.0/24"
-app_subnet_address_name   = "app"
+app_subnet_address_name   = "appsnet"
 appbkend_subnet_address_prefix = "192.168.3.0/24"
-appbkend_subnet_address_name = "appbkend"
+appbkend_subnet_address_name = "appbkendsnet"
 appbrst_subnet_address_prefix = "192.168.4.0/24"
-appbrst_subnet_address_name = "appbrst"
-
+appbrst_subnet_address_name = "appbrstsnet"
+pe_subnet_address_name="pesnet"
+pe_subnet_address_prefix="192.168.5.0/24"
 location="canadacentral"
 sql_nsg_name="sql_nsg"
 app_nsg_name="app_nsg"
@@ -33,6 +34,7 @@ sqladminpwd="Password12$$"
 sqllogfilepath="F:\\Logs"
 sqldatafilepath="G:\\Data"
 vm_size_sql="Standard_DS3_v2"
+vm_size_sqlmedium="Standard_D8ds_v4"
 
 #Web app vm creation
 appvmcount=2
@@ -40,14 +42,14 @@ publisher_windows = "MicrosoftWindowsServer"
 offer_windows ="WindowsServer"
 sku_windows = "2019-Datacenter"
 version_windows = "latest"
-appvm_names = "WebApp"
+appvm_names = "csDcOms1ASvc0"
  
 #common variables
 vm_dompassword="Password12$$"
 existingrgname="sqlvmsrg"
 
 #keyvault variables
-kvname = "devkeyvault001"
+kvname = "devkeyvaultz001"
 kvsku_name="standard"
 
 #application gateway variables
@@ -62,6 +64,7 @@ appgwname="myAppGateway"
 appgwpip="myAGPublicIPAddress"
 private_frontend_ip_configuration_name="myAGPrivateIPAddress"
 backendaddresspoolfqdns=["webApp0.phebsix.com","WebApp1.phebsix.com"]
+appgwprivateip="192.168.1.10"
 
 #Azure Redis Cache configuration variable
 capacity=2
@@ -72,9 +75,28 @@ sku_name="Standard"
 storage_list=["shols001","shols002","shols003"]
 containers_list=[{ name = "sa1container1", access_type = "private" }]
 
-#Azure Linux VM 
+#Azure Custom Linux VM 
 webbfecount=2
-webbfe_names="BrstWeb"
+webbfe_names="csDcOms1Svc0"
 cstlinuxvmsize="Standard_DS2_v2"
-source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/images/omsimg"
+source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/cstlinuxvm/versions/0.0.1"
 brstvmrg_name="sqlvmsrg"
+
+#Azure Custom Windows 
+appbkendvmrg_name="sqlvmsrg"
+win_source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/images/omsimg"
+appbkendcount=1
+cstwinvmsize ="Standard_DS2_v2"
+appbkend_names="appbkend"
+
+#Azure Resource Groups
+
+resource_groups = {
+ devvnetrg= {
+    location   = "canadacentral"
+    }
+
+  sqlvmsrg = {
+    location   = "canadacentral"
+    }
+}

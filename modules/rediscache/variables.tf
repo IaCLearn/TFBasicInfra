@@ -17,3 +17,8 @@
 variable "location" {
   default = "canadacentral"
 }
+
+variable "rediscachelist" {
+  type = list
+  
+ }

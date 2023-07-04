@@ -15,3 +15,7 @@ variable "kvsku_name" {
 variable "location" {
   default = "canadacentral"
 }
+variable "keyvaultlist" {
+  type = list
+  
+ }

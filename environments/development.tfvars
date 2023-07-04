@@ -50,6 +50,7 @@ existingrgname="sqlvmsrg"
 
 #keyvault variables
 kvname = "devkeyvaultz001"
+keyvaultlist=["devkeyvaultz001","devkeyvaultz002"]
 kvsku_name="standard"
 
 #application gateway variables
@@ -70,6 +71,7 @@ appgwprivateip="192.168.1.10"
 capacity=2
 redisfamily="C"
 sku_name="Standard"
+rediscachelist=["errovam002","errovam003"]
 
 #Azure Storage Account Configuration variables
 storage_list=["shols001","shols002","shols003"]

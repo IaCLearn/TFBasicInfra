@@ -102,3 +102,18 @@ resource_groups = {
     location   = "canadacentral"
     }
 }
+
+#SQL VM List 
+
+sqlvmlist={
+  sqlvm01={
+    size="Standard_D8ds_v4",
+    datadisksize="512",
+    logdisksize="128"
+  }
+  sqlvm02={
+    size="Standard_D8ds_v4",
+    datadisksize="512",
+    logdisksize="128"
+  }
+}

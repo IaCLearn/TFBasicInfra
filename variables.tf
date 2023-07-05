@@ -120,10 +120,10 @@ variable "apprg_name" {
     description="Resource Group name for the application"
 }
 
-variable "sql_vmname" {
-    type = string
-  description = "name of the SQL Virtual Machine. "
-}
+# variable "sql_vmname" {
+#     type = string
+#   description = "name of the SQL Virtual Machine. "
+# }
 variable "vmusername"{
 type=string
 description="VM user name"
@@ -408,3 +408,8 @@ variable "rediscachelist" {
   type = list
   
  }
+
+ variable "sqlvmlist" {
+  type        = map(any)
+  description = "(Required) A list of Azure Virtual Machines"
+}

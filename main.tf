@@ -3,31 +3,31 @@ module "resourcegroup_md" {
   source="./modules/resourcegroups"
   resource_groups = var.resource_groups
 }
-# module "vnet_md" {
-#   source = "./modules/vnet"
-#   vnetrgname = module.resourcegroup_md.vnetrgname//.vnetrgname
-#   vnet_name                      = var.vnet_name
-#   location                    = var.location
-#   network_address_space       = var.network_address_space
-#   app_subnet_address_prefix   = var.app_subnet_address_prefix
-#   app_subnet_address_name     = var.app_subnet_address_name
-#   db_subnet_address_prefix   = var.db_subnet_address_prefix
-#   db_subnet_address_name     = var.db_subnet_address_name
-#   appgw_subnet_address_prefix = var.appgw_subnet_address_prefix
-#   appgw_subnet_address_name   = var.appgw_subnet_address_name
-#   appbkend_subnet_address_prefix = var.appbkend_subnet_address_prefix
-#   appbkend_subnet_address_name = var.appbkend_subnet_address_name
-#   appbrst_subnet_address_prefix = var.appbrst_subnet_address_prefix
-#   appbrst_subnet_address_name = var.appbrst_subnet_address_name
-#   pe_subnet_address_name = var.pe_subnet_address_name
-#   pe_subnet_address_prefix = var.pe_subnet_address_prefix
-#   environment                 = var.environment
-#   sql_nsg_name=               var.sql_nsg_name
-#   app_nsg_name= var.app_nsg_name
-#   dnsservers=var.dnsservers
-#  // depends_on = [module.resourcegroup_md ]
+module "vnet_md" {
+  source = "./modules/vnet"
+  vnetrgname = module.resourcegroup_md.vnetrgname//.vnetrgname
+  vnet_name                      = var.vnet_name
+  location                    = var.location
+  network_address_space       = var.network_address_space
+  app_subnet_address_prefix   = var.app_subnet_address_prefix
+  app_subnet_address_name     = var.app_subnet_address_name
+  db_subnet_address_prefix   = var.db_subnet_address_prefix
+  db_subnet_address_name     = var.db_subnet_address_name
+  appgw_subnet_address_prefix = var.appgw_subnet_address_prefix
+  appgw_subnet_address_name   = var.appgw_subnet_address_name
+  appbkend_subnet_address_prefix = var.appbkend_subnet_address_prefix
+  appbkend_subnet_address_name = var.appbkend_subnet_address_name
+  appbrst_subnet_address_prefix = var.appbrst_subnet_address_prefix
+  appbrst_subnet_address_name = var.appbrst_subnet_address_name
+  pe_subnet_address_name = var.pe_subnet_address_name
+  pe_subnet_address_prefix = var.pe_subnet_address_prefix
+  environment                 = var.environment
+  sql_nsg_name=               var.sql_nsg_name
+  app_nsg_name= var.app_nsg_name
+  dnsservers=var.dnsservers
+ // depends_on = [module.resourcegroup_md ]
   
-# }
+}
 
 # module "stgaccount_md" {
 #   source = "./modules/storageaccounts"
@@ -78,7 +78,25 @@ module "resourcegroup_md" {
 #   depends_on = [module.resourcegroup_md ]
 #  }
 
-
+module "sql_md" {
+source = "./modules/vm/sqlvm"
+apprg_name=module.resourcegroup_md.apprgname
+sqlvmlist = var.sqlvmlist
+publisher_sql=var.publisher_sql
+offer_sql=var.offer_sql
+sku_sql=var.sku_sql
+image_version_sql=var.image_version_sql
+vmusername= var.vmusername
+vmpassword = var.vmpassword
+sqladminpwd=var.sqladminpwd
+sqladmin=var.sqladmin
+sqllogfilepath=var.sqllogfilepath
+sqldatafilepath=var.sqldatafilepath
+vm_size_sql=var.vm_size_sql
+ environment = var.environment
+existingdbsnetid=module.vnet_md.db_subnet_id
+ vm_dompassword=var.vm_dompassword
+ }
 
 # root module for custom linux image
 # module "cstlinuxvm_md" {
@@ -107,15 +125,15 @@ module "resourcegroup_md" {
   #    environment=var.environment
   # }
 
-module "keyvault_md" {
-  source = "./modules/keyvault"
-  existingrgname=module.resourcegroup_md.apprgname
-  kvname = var.kvname
-  kvsku_name = var.kvsku_name
-  keyvaultlist = var.keyvaultlist
-  //depends_on = [ module.vm_md ]
-  //depends_on = [module.resourcegroup_md]
-}
+# module "keyvault_md" {
+#   source = "./modules/keyvault"
+#   existingrgname=module.resourcegroup_md.apprgname
+#   kvname = var.kvname
+#   kvsku_name = var.kvsku_name
+#   keyvaultlist = var.keyvaultlist
+#   //depends_on = [ module.vm_md ]
+#   //depends_on = [module.resourcegroup_md]
+# }
 
 # module "appgw_md"{
 # source="./modules/applicationgateway"

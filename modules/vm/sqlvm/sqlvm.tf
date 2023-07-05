@@ -1,23 +1,12 @@
-#sql vm creation single machine
-resource "azurerm_network_interface" "db-nic" {
-  name                = "${var.sql_vmname}-db-nic"
-  location            = var.location
-  resource_group_name = var.apprg_name
-
-  ip_configuration {
-    name                          = "${var.sql_vmname}-IP"
-    subnet_id     =var.existingdbsnetid
-    private_ip_address_allocation = "Dynamic"
-  }
-}
 
 resource "azurerm_virtual_machine" "sqlvm" {
-  name                = var.sql_vmname
+  for_each    = var.sqlvmlist
+  name = each.key
    location            = var.location
   resource_group_name = var.apprg_name
-  vm_size                = var.vm_size_sql
+  vm_size                = each.value.size
   network_interface_ids = [
-    azurerm_network_interface.db-nic.id
+   azurerm_network_interface.db-nic[each.key].id
   ]
 
 
@@ -33,7 +22,7 @@ resource "azurerm_virtual_machine" "sqlvm" {
   }
 
   storage_os_disk {
-    name              = "${var.sql_vmname}-OS"
+    name              = "${each.key}-OS"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Premium_LRS"
@@ -41,19 +30,19 @@ resource "azurerm_virtual_machine" "sqlvm" {
   }
 
   storage_data_disk {
-    name              = "${var.sql_vmname}-DATA"
+    name              = "${each.key}-DATA"
     caching           = "ReadOnly"
     create_option     = "Empty"
-    disk_size_gb      = 256
+    disk_size_gb      = each.value.datadisksize
     lun               = 0
     managed_disk_type = "Premium_LRS"
   }
 
   storage_data_disk {
-    name              = "${var.sql_vmname}-LOG"
+    name              = "${each.key}-LOG"
     caching           = "ReadOnly"
     create_option     = "Empty"
-    disk_size_gb      = 128
+    disk_size_gb      = each.value.logdisksize
     lun               = 1
     managed_disk_type = "Premium_LRS"
 
@@ -62,7 +51,7 @@ resource "azurerm_virtual_machine" "sqlvm" {
   os_profile {
     admin_password = var.vmpassword
     admin_username = var.vmusername
-    computer_name  = var.sql_vmname
+    computer_name  = each.key
   }
 
   os_profile_windows_config {
@@ -73,12 +62,25 @@ resource "azurerm_virtual_machine" "sqlvm" {
   
 }
 
-#disable domain firewall for domain activities
+resource "azurerm_network_interface" "db-nic" {
+  for_each = var.sqlvmlist
+  name                = each.key
+  location            = var.location
+  resource_group_name = var.apprg_name
+
+  ip_configuration {
+    name    = "${each.key}-IP"
+    subnet_id     =var.existingdbsnetid
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+
 
 resource "azurerm_virtual_machine_extension" "vm_extension_modify_fw" {
-   
+     for_each = var.sqlvmlist
     name = "vm_modify_fw"
-    virtual_machine_id = azurerm_virtual_machine.sqlvm.id
+    virtual_machine_id =azurerm_virtual_machine.sqlvm[each.key].id
     publisher = "Microsoft.Compute"
     type = "CustomScriptExtension"
     type_handler_version = "1.8"
@@ -94,36 +96,10 @@ resource "azurerm_virtual_machine_extension" "vm_extension_modify_fw" {
     ]
 }
 
-#join sqlvm to domain
 
-resource "azurerm_virtual_machine_extension" "sqldomjoin" {
- 
-name = "domjoin"
-virtual_machine_id = azurerm_virtual_machine.sqlvm.id
-publisher = "Microsoft.Compute"
-type = "JsonADDomainExtension"
-type_handler_version = "1.3"
-
-settings = <<SETTINGS
-{
-"Name": "phebsix.com",
-"User": "phebsix\\localadmin",
-"Restart": "true",
-"Options": "3"
-}
-SETTINGS
-protected_settings = <<PROTECTED_SETTINGS
-{
-"Password": "${var.vm_dompassword}"
-}
-PROTECTED_SETTINGS
- depends_on = [azurerm_virtual_machine.sqlvm,azurerm_mssql_virtual_machine.azurerm_sqlvmmanagement,azurerm_virtual_machine_extension.vm_extension_modify_fw]
-}
-
-#SQL Management for Azure SQL 
 resource "azurerm_mssql_virtual_machine" "azurerm_sqlvmmanagement" {
-
-  virtual_machine_id               = azurerm_virtual_machine.sqlvm.id
+  for_each = var.sqlvmlist  
+  virtual_machine_id               = azurerm_virtual_machine.sqlvm[each.key].id
   sql_license_type                 = "PAYG"
   sql_connectivity_port            = 1433
   sql_connectivity_type            = "PRIVATE"
@@ -153,4 +129,29 @@ resource "azurerm_mssql_virtual_machine" "azurerm_sqlvmmanagement" {
 
   }
 
+}
+
+resource "azurerm_virtual_machine_extension" "sqldomjoin" {
+for_each = var.sqlvmlist
+name = "domjoin"
+virtual_machine_id = azurerm_virtual_machine.sqlvm[each.key].id
+publisher = "Microsoft.Compute"
+type = "JsonADDomainExtension"
+type_handler_version = "1.3"
+
+settings = <<SETTINGS
+{
+"Name": "phebsix.com",
+"OUPath":"OU=AzureVM,DC=phebsix,DC=com",
+"User": "localadmin@phebsix.com",
+"Restart": "true",
+"Options": "3"
+}
+SETTINGS
+protected_settings = <<PROTECTED_SETTINGS
+{
+"Password": "${var.vm_dompassword}"
+}
+PROTECTED_SETTINGS
+ depends_on = [azurerm_virtual_machine.sqlvm,azurerm_mssql_virtual_machine.azurerm_sqlvmmanagement,azurerm_virtual_machine_extension.vm_extension_modify_fw]
 }

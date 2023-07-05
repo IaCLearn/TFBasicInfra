@@ -34,10 +34,10 @@ variable "location" {
 
 # }
 
-variable "sql_vmname" {
-    type= string
-  description = "name of the SQL Virtual Machine."
-}
+# variable "sql_vmname" {
+#     type= string
+#   description = "name of the SQL Virtual Machine."
+# }
 
 variable "vm_dompassword" {
   description = "Admin Password for the VM's"
@@ -107,28 +107,7 @@ variable "image_version_sql" {
   description = "version for the image"
 }
 
-# variable "publisher_windows"{
-  
-#   type = string
-
-#   description = "version of windows"
-# }
-
-# variable "offer_windows" {
-
-#   type = string
-#   description = "offering version of windows"
-# }
-    
-# variable "sku_windows" {
-#   type = string
-#   description="Windows version sku"
-# }
-# variable "version_windows" {
-
-#   type = string
-
-#   description = "version of windows like latest"
-  
-# }
- 
+variable "sqlvmlist" {
+  type        = map(any)
+  description = "(Required) A list of Azure Virtual Machines"
+}

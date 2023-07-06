@@ -29,16 +29,16 @@ module "vnet_md" {
   
 }
 
-module "stgaccount_md" {
-  source = "./modules/storageaccounts"
-  storage_list = var.storage_list
-  containers_list = var.containers_list
-  existingrgname = module.resourcegroup_md.apprgname
-depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
+# module "stgaccount_md" {
+#   source = "./modules/storageaccounts"
+#   storage_list = var.storage_list
+#   containers_list = var.containers_list
+#   existingrgname = module.resourcegroup_md.apprgname
+# depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
   
-}
+# }
 
-
+#generic windows vm module, comment out if needed
 # module "vm_md" {
 # source = "./modules/vm/genericvm"
 # apprg_name=module.resourcegroup_md.apprgname
@@ -59,85 +59,85 @@ depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
 #module to create vms from Azure SQL Server Market Place Image
 
 
-module "sql_md" {
-source = "./modules/vm/sqlvm"
-apprg_name=module.resourcegroup_md.apprgname
-sqlvmlist = var.sqlvmlist
-publisher_sql=var.publisher_sql
-offer_sql=var.offer_sql
-sku_sql=var.sku_sql
-image_version_sql=var.image_version_sql
-vmusername= var.vmusername
-vmpassword = var.vmpassword
-sqladminpwd=var.sqladminpwd
-sqladmin=var.sqladmin
-sqllogfilepath=var.sqllogfilepath
-sqldatafilepath=var.sqldatafilepath
-vm_size_sql=var.vm_size_sql
- environment = var.environment
-existingdbsnetid=module.vnet_md.db_subnet_id
- vm_dompassword=var.vm_dompassword
- }
+# module "sql_md" {
+# source = "./modules/vm/sqlvm"
+# apprg_name=module.resourcegroup_md.apprgname
+# sqlvmlist = var.sqlvmlist
+# publisher_sql=var.publisher_sql
+# offer_sql=var.offer_sql
+# sku_sql=var.sku_sql
+# image_version_sql=var.image_version_sql
+# vmusername= var.vmusername
+# vmpassword = var.vmpassword
+# sqladminpwd=var.sqladminpwd
+# sqladmin=var.sqladmin
+# sqllogfilepath=var.sqllogfilepath
+# sqldatafilepath=var.sqldatafilepath
+# vm_size_sql=var.vm_size_sql
+#  environment = var.environment
+# existingdbsnetid=module.vnet_md.db_subnet_id
+#  vm_dompassword=var.vm_dompassword
+#  }
 
 # root module for custom linux image
 
- module "cstlinuxvm_md" {
-  source ="./modules/vm/customimagelinuxvm"
-  brstvmrg_name=module.resourcegroup_md.apprgname
-  existingappbrstsnetid=module.vnet_md.appbrst_subnet_id
-  environment=var.environment
-  source_image_id=var.source_image_id
-  vmpassword = var.vmpassword
-  vmusername = var.vmusername
-  lincstvmlist = var.lincstvmlist
-  }
+#  module "cstlinuxvm_md" {
+#   source ="./modules/vm/customimagelinuxvm"
+#   brstvmrg_name=module.resourcegroup_md.apprgname
+#   existingappbrstsnetid=module.vnet_md.appbrst_subnet_id
+#   environment=var.environment
+#   source_image_id=var.source_image_id
+#   vmpassword = var.vmpassword
+#   vmusername = var.vmusername
+#   lincstvmlist = var.lincstvmlist
+#   }
 
 
-    module "cstwinvm_md"{
-    source ="./modules/vm/customimagewinvm"
-    appbkendvmrg_name = module.resourcegroup_md.apprgname
-    existingappbkendsnetid=module.vnet_md.appbkend_subnet_id
-    win_source_image_id = var.win_source_image_id
-    vmpassword = var.vmpassword
-    vmusername = var.vmusername
-     environment=var.environment
-     wincstvmlist = var.wincstvmlist
-  }
+#     module "cstwinvm_md"{
+#     source ="./modules/vm/customimagewinvm"
+#     appbkendvmrg_name = module.resourcegroup_md.apprgname
+#     existingappbkendsnetid=module.vnet_md.appbkend_subnet_id
+#     win_source_image_id = var.win_source_image_id
+#     vmpassword = var.vmpassword
+#     vmusername = var.vmusername
+#      environment=var.environment
+#      wincstvmlist = var.wincstvmlist
+#   }
 
-module "keyvault_md" {
-  source = "./modules/keyvault"
-  existingrgname=module.resourcegroup_md.apprgname
-  kvsku_name = var.kvsku_name
-  keyvaultlist = var.keyvaultlist
-  depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
-}
+# module "keyvault_md" {
+#   source = "./modules/keyvault"
+#   existingrgname=module.resourcegroup_md.apprgname
+#   kvsku_name = var.kvsku_name
+#   keyvaultlist = var.keyvaultlist
+#   depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
+# }
 
-module "appgw_md"{
-source="./modules/applicationgateway"
-backend_address_pool_name=var.backend_address_pool_name
-frontend_port_name=var.frontend_port_name
-http_setting_name=var.http_setting_name
-listener_name=var.listener_name
-request_routing_rule_name=var.request_routing_rule_name
-appgwipconfigname=var.appgwpip
-frontend_ip_configuration_name=var.frontend_ip_configuration_name
-private_frontend_ip_configuration_name = var.private_frontend_ip_configuration_name
-appgwname=module.resourcegroup_md.apprgname
-appgwpip=var.appgwpip
-existingrgname=var.existingrgname
-existingappgwsubnetid =  module.vnet_md.appgw_subnet_id
-backendaddresspoolfqdns = var.backendaddresspoolfqdns
-appgwprivateip=var.appgwprivateip
-  depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
-}
+# module "appgw_md"{
+# source="./modules/applicationgateway"
+# backend_address_pool_name=var.backend_address_pool_name
+# frontend_port_name=var.frontend_port_name
+# http_setting_name=var.http_setting_name
+# listener_name=var.listener_name
+# request_routing_rule_name=var.request_routing_rule_name
+# appgwipconfigname=var.appgwpip
+# frontend_ip_configuration_name=var.frontend_ip_configuration_name
+# private_frontend_ip_configuration_name = var.private_frontend_ip_configuration_name
+# appgwname=module.resourcegroup_md.apprgname
+# appgwpip=var.appgwpip
+# existingrgname=var.existingrgname
+# existingappgwsubnetid =  module.vnet_md.appgw_subnet_id
+# backendaddresspoolfqdns = var.backendaddresspoolfqdns
+# appgwprivateip=var.appgwprivateip
+#   depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
+# }
 
-module "redishcache_md" {
-  source = "./modules/rediscache"
-  capacity= var.capacity
-  redisfamily=var.redisfamily
-  sku_name=var.sku_name
-  existingrgname=module.resourcegroup_md.apprgname
-  rediscachelist = var.rediscachelist
- depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
-}
+# module "redishcache_md" {
+#   source = "./modules/rediscache"
+#   capacity= var.capacity
+#   redisfamily=var.redisfamily
+#   sku_name=var.sku_name
+#   existingrgname=module.resourcegroup_md.apprgname
+#   rediscachelist = var.rediscachelist
+#  depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
+# }
 

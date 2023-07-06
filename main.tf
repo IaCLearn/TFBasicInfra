@@ -59,25 +59,25 @@ depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
 #module to create vms from Azure SQL Server Market Place Image
 
 
-# module "sql_md" {
-# source = "./modules/vm/sqlvm"
-# apprg_name=module.resourcegroup_md.apprgname
-# sqlvmlist = var.sqlvmlist
-# publisher_sql=var.publisher_sql
-# offer_sql=var.offer_sql
-# sku_sql=var.sku_sql
-# image_version_sql=var.image_version_sql
-# vmusername= var.vmusername
-# vmpassword = var.vmpassword
-# sqladminpwd=var.sqladminpwd
-# sqladmin=var.sqladmin
-# sqllogfilepath=var.sqllogfilepath
-# sqldatafilepath=var.sqldatafilepath
-# vm_size_sql=var.vm_size_sql
-#  environment = var.environment
-# existingdbsnetid=module.vnet_md.db_subnet_id
-#  vm_dompassword=var.vm_dompassword
-#  }
+module "sql_md" {
+source = "./modules/vm/sqlvm"
+apprg_name=module.resourcegroup_md.apprgname
+sqlvmlist = var.sqlvmlist
+publisher_sql=var.publisher_sql
+offer_sql=var.offer_sql
+sku_sql=var.sku_sql
+image_version_sql=var.image_version_sql
+vmusername= var.vmusername
+vmpassword = var.vmpassword
+sqladminpwd=var.sqladminpwd
+sqladmin=var.sqladmin
+sqllogfilepath=var.sqllogfilepath
+sqldatafilepath=var.sqldatafilepath
+vm_size_sql=var.vm_size_sql
+ environment = var.environment
+existingdbsnetid=module.vnet_md.db_subnet_id
+ vm_dompassword=var.vm_dompassword
+ }
 
 # root module for custom linux image
 

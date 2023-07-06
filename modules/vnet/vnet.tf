@@ -153,6 +153,7 @@ resource "azurerm_network_security_rule" "app" {
 }
 
 resource "azurerm_route_table" "RT_OnPrem" {
+    count = var.environment != "Development" ? 1 : 0 
   name                = "example-routetable"
  location=var.location
    resource_group_name = var.vnetrgname
@@ -166,18 +167,21 @@ resource "azurerm_route_table" "RT_OnPrem" {
 }
 
 resource "azurerm_subnet_route_table_association" "app_assos" {
+  count = var.environment != "Development" ? 1 : 0 
   subnet_id      = azurerm_subnet.app_subnet.id
-  route_table_id = azurerm_route_table.RT_OnPrem.id
+  route_table_id = azurerm_route_table.RT_OnPrem[0].id
 }
 
 resource "azurerm_subnet_route_table_association" "db_assos" {
+  count = var.environment != "Development" ? 1 : 0 
   subnet_id      = azurerm_subnet.db_subnet.id
-  route_table_id = azurerm_route_table.RT_OnPrem.id
+  route_table_id = azurerm_route_table.RT_OnPrem[0].id
 }
 
 resource "azurerm_subnet_route_table_association" "appbrst_assos" {
+  count = var.environment != "Development" ? 1 : 0 
   subnet_id      = azurerm_subnet.appbrst_subnet.id
-  route_table_id = azurerm_route_table.RT_OnPrem.id
+  route_table_id = azurerm_route_table.RT_OnPrem[0].id
 }
 #peering new virtual network to existing hub section
 data "azurerm_virtual_network" "existinghubnetwork" {

@@ -64,12 +64,12 @@ resource "azurerm_virtual_machine" "sqlvm" {
 
 resource "azurerm_network_interface" "db-nic" {
   for_each = var.sqlvmlist
-  name                = each.key
+  name                = "${each.key}-nic"
   location            = var.location
   resource_group_name = var.apprg_name
 
   ip_configuration {
-    name    = "${each.key}-IP"
+    name    = "${each.key}-ipconfig"
     subnet_id     =var.existingdbsnetid
     private_ip_address_allocation = "Dynamic"
   }

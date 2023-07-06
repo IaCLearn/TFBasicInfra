@@ -1,5 +1,4 @@
 # Virtual Network
-//vnetrgname="devvnetrg"
 vnet_name                   = "dev-vnet"
 network_address_space       = "192.168.0.0/16"
 db_subnet_address_prefix   = "192.168.0.0/24"
@@ -18,25 +17,9 @@ location="canadacentral"
 sql_nsg_name="sql_nsg"
 app_nsg_name="app_nsg"
 environment = "Development"
-dnsservers=["10.0.0.4","168.63.129.16","10.0.0.5"]
+dnsservers=["10.0.0.4"]
 
-# SQL VM creation
-apprg_name="sqlvmsrg"
-sql_vmname="sqlvm01"
-publisher_sql="MicrosoftSQLServer"
-offer_sql="sql2019-ws2019"
-sku_sql="SQLDEV-gen2"
-image_version_sql="latest"
-vmusername="localadmin"
-sqladmin="localadmin"
-vmpassword="Password12$$"
-sqladminpwd="Password12$$"
-sqllogfilepath="F:\\Logs"
-sqldatafilepath="G:\\Data"
-vm_size_sql="Standard_DS3_v2"
-vm_size_sqlmedium="Standard_D8ds_v4"
-
-#Web app vm creation
+#Web app vm creation generic windows vm
 appvmcount=2
 publisher_windows = "MicrosoftWindowsServer"
 offer_windows ="WindowsServer"
@@ -49,7 +32,6 @@ vm_dompassword="Password12$$"
 existingrgname="sqlvmsrg"
 
 #keyvault variables
-kvname = "devkeyvaultz001"
 keyvaultlist=["devkeyvaultz001","devkeyvaultz002"]
 kvsku_name="standard"
 
@@ -64,7 +46,7 @@ frontend_ip_configuration_name="myAGIPConfig"
 appgwname="myAppGateway"
 appgwpip="myAGPublicIPAddress"
 private_frontend_ip_configuration_name="myAGPrivateIPAddress"
-backendaddresspoolfqdns=["webApp0.phebsix.com","WebApp1.phebsix.com"]
+backendaddresspoolfqdns=["linuxvm01.phebsix.com","linuxvm02.phebsix.com"]
 appgwprivateip="192.168.1.10"
 
 #Azure Redis Cache configuration variable
@@ -77,34 +59,28 @@ rediscachelist=["errovam002","errovam003"]
 storage_list=["shols001","shols002","shols003"]
 containers_list=[{ name = "sa1container1", access_type = "private" }]
 
-#Azure Custom Linux VM 
-webbfecount=2
-webbfe_names="csDcOms1Svc0"
-cstlinuxvmsize="Standard_DS2_v2"
-source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/cstlinuxvm/versions/0.0.1"
-brstvmrg_name="sqlvmsrg"
-
-#Azure Custom Windows 
-appbkendvmrg_name="sqlvmsrg"
-win_source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/images/omsimg"
-appbkendcount=1
-cstwinvmsize ="Standard_DS2_v2"
-appbkend_names="appbkend"
-
 #Azure Resource Groups
+resource_groups=[
+{
+      id = 1
+      name = "devvnetrg" 
+      location="canadacentral"
+    },
+    {
+      id = 2
+      name = "sqlvmsrg" 
+      location="canadacentral"
 
-resource_groups = {
- devvnetrg= {
-    location   = "canadacentral"
-    }
+    },
+    {
+      id = 3
+      name = "drvmrg"
+      location="canadaeast"
 
-  sqlvmsrg = {
-    location   = "canadacentral"
     }
-}
+]
 
 #SQL VM List 
-
 sqlvmlist={
   sqlvm01={
     size="Standard_D8ds_v4",
@@ -116,4 +92,68 @@ sqlvmlist={
     datadisksize="512",
     logdisksize="128"
   }
+    sqlvm03={
+    size="Standard_D8ds_v4",
+    datadisksize="512",
+    logdisksize="128"
+  }
 }
+
+# SQL VM General creation
+apprg_name="sqlvmsrg"
+publisher_sql="MicrosoftSQLServer"
+offer_sql="sql2019-ws2019"
+sku_sql="SQLDEV-gen2"
+image_version_sql="latest"
+vmusername="localadmin"
+sqladmin="localadmin"
+vmpassword="Password12$$"
+sqladminpwd="Password12$$"
+sqllogfilepath="F:\\Logs"
+sqldatafilepath="G:\\Data"
+vm_size_sql="Standard_DS3_v2"
+vm_size_sqlmedium="Standard_D8ds_v4"
+
+#General variables for custom linux image
+source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/cstlinuxvm/versions/0.0.1"
+brstvmrg_name="sqlvmsrg"
+
+#customlinux vm list
+lincstvmlist={
+linuxvm01={
+    size="Standard_D8ds_v4",
+    datadisksize="512"
+  }
+  linuxvm02={
+    size="Standard_D8ds_v4",
+    datadisksize="512"
+   
+  }
+    linuxvm03={
+    size="Standard_D8ds_v4",
+    datadisksize="512"
+  
+  }
+}
+
+#Azure Custom Windows 
+appbkendvmrg_name="sqlvmsrg"
+win_source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/wincstimg/versions/0.0.1"
+wincstvmlist={
+wincstvm01={
+    size="Standard_D8ds_v4",
+    datadisksize="512"
+  }
+  wincstvm02={
+    size="Standard_D8ds_v4",
+    datadisksize="512"
+   
+  }
+    wincstvm03={
+    size="Standard_D8ds_v4",
+    datadisksize="512"
+  
+  }
+}
+
+

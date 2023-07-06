@@ -234,10 +234,7 @@ variable "kvsku_name" {
 description = "sku for keyvault"
 }
 
-variable "kvname" {
-      type    = string
-description = "Keyvault name"
-}
+
 
 variable "existingrgname" {
 
@@ -334,22 +331,6 @@ variable "backendaddresspoolfqdns" {
  }
 
  #custom linux image variables
-
-variable "webbfecount" {
-  type = number
-  description = "number of vms to be created"
-}
-
-variable "webbfe_names" {
-  type    = string
-
-}
-variable "cstlinuxvmsize"{
-
-    type = string
-    description = "VM Size for linux Virtual Machine"
-}
-
 variable "source_image_id" {
   type = string
   description = "vm source image id"
@@ -369,21 +350,7 @@ variable "appbkendvmrg_name" {
     description="Resource Group name for the application"
 }
 
-variable "appbkendcount" {
-  type = number
-  description = "number of vms to be created"
-}
 
-variable "appbkend_names" {
-  type    = string
-
-}
-
-variable "cstwinvmsize"{
-
-    type = string
-    description = "VM Size for linux Virtual Machine"
-}
 
 variable "win_source_image_id" {
   type = string
@@ -391,14 +358,12 @@ variable "win_source_image_id" {
   
 }
 
-#variable declaration for resource groups
 
 variable "resource_groups" {
-  type        = map(any)
+  type = list(map(string))
+ 
   description = "(Required) A list of Azure Resource Groups with locations and tags"
 }
-
-
 variable "rediscachelist" {
   type = list
   
@@ -413,3 +378,14 @@ variable "rediscachelist" {
   type        = map(any)
   description = "(Required) A list of Azure Virtual Machines"
 }
+
+ variable "wincstvmlist" {
+  type        = map(any)
+  description = "(Required) A list of Azure Windows Custom VM"
+}
+
+ variable "lincstvmlist" {
+  type        = map(any)
+  description = "(Required) A list of Azure Linux Custom VM"
+}
+

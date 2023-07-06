@@ -17,6 +17,7 @@ resource_group_name  = "tfstate"
       container_name       = "tfstate"
       key                  = "terraform.tfstate"
        subscription_id   = "10c1c1c4-c34c-4a6f-b4bd-8560ab234169"
+       
   }
   
 }

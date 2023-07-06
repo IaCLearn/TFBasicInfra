@@ -18,15 +18,7 @@ variable "location" {
   default = "canadacentral"
 }
 
-variable "webbfecount" {
-  type = number
-  description = "number of vms to be created"
-}
-
-variable "webbfe_names" {
-  type    = string
-
-}
+# 
 
 
 variable "vmusername"{
@@ -41,14 +33,14 @@ description="VM user pass"
 }
 
 
-variable "cstlinuxvmsize"{
-
-    type = string
-    description = "VM Size for linux Virtual Machine"
-}
 
 variable "source_image_id" {
   type = string
   description = "vm source image id"
   
+}
+
+ variable "lincstvmlist" {
+  type        = map(any)
+  description = "(Required) A list of Azure Linux Custom VM"
 }

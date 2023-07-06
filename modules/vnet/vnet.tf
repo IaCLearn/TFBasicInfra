@@ -2,7 +2,8 @@ provider "azurerm" {
   features {}
  alias = "hubsubscription"
  #hub subscription id with the hub vnet
- subscription_id ="10c1c1c4-c34c-4a6f-b4bd-8560ab234169" 
+ subscription_id ="10c1c1c4-c34c-4a6f-b4bd-8560ab234169"
+  
 }
 
 provider "azurerm" {

@@ -18,15 +18,6 @@ variable "location" {
   default = "canadacentral"
 }
 
-variable "appbkendcount" {
-  type = number
-  description = "number of vms to be created"
-}
-
-variable "appbkend_names" {
-  type    = string
-
-}
 
 
 variable "vmusername"{
@@ -41,14 +32,19 @@ description="VM user pass"
 }
 
 
-variable "cstwinvmsize"{
+# variable "cstwinvmsize"{
 
-    type = string
-    description = "VM Size for linux Virtual Machine"
-}
+#     type = string
+#     description = "VM Size for linux Virtual Machine"
+# }
 
 variable "win_source_image_id" {
   type = string
   description = "vm source image id"
   
+}
+
+variable "wincstvmlist" {
+  type        = map(any)
+  description = "(Required) A list of Azure Windows Custom VM"
 }

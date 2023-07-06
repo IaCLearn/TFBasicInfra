@@ -4,7 +4,7 @@ data "azurerm_client_config" "current" {}
 #Key vault name must be globally unique
 resource "azurerm_key_vault" "keyvault" {
 
- // name                        = "${var.kvname}-kv"
+
  for_each = toset(var.keyvaultlist) 
   name=each.value
   location                    = var.location

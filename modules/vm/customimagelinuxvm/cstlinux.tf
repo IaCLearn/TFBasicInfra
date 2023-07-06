@@ -1,23 +1,24 @@
-resource "azurerm_network_interface" "webbfe-nic" {
-  count               = "${var.webbfecount}"
-  name                = "${var.webbfe_names}${count.index}-nic"
+resource "azurerm_network_interface" "webbfe-nic1" {
+ for_each = var.lincstvmlist
+  name                = "${each.key}-nic"
   location            = var.location
   resource_group_name = var.brstvmrg_name
 
   ip_configuration {
-    name = "${var.webbfe_names}${count.index+1}-ipconfig"
+    name = "${each.key}-ipconfig"
     subnet_id = var.existingappbrstsnetid
     private_ip_address_allocation = "Dynamic"
   }
 }
 
+
 resource "azurerm_linux_virtual_machine" "webbfevms" {
-  count                 = var.webbfecount                               
-  name                  = "${var.webbfe_names}${count.index + 1}vm"
+  for_each = var.lincstvmlist                          
+  name                  = each.key
  location            = var.location
   resource_group_name = var.brstvmrg_name
-  network_interface_ids = [azurerm_network_interface.webbfe-nic[count.index].id]
-  size =var.cstlinuxvmsize
+  network_interface_ids = [azurerm_network_interface.webbfe-nic1[each.key].id]
+  size = each.value.size
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"

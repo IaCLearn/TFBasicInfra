@@ -1,12 +1,37 @@
+#common variables
 variable "location" {
   type        = string
   description = "Location of Resources"
 }
-# variable "vnetrgname" {
-#   type = string
-#   description = "Virtual Network Rg names"
+
+
+variable "vmusername"{
+type=string
+description="VM user name"
+
+}
+
+variable "vmpassword"{
+type=string
+description="VM user pass"
+}
+
+variable "domainname" {
+  type=string
+description="domain name for active directory join"
   
-# }
+}
+
+variable "oupath" {
+  type=string
+description="VM oupath for active directory join"
+}
+
+variable "domainusername" {
+  type=string
+description="domain username for active directory join"
+}
+
 #Virtual Network Variables
 variable "vnet_name" {
   type        = string
@@ -83,6 +108,16 @@ variable "pe_subnet_address_name" {
   description = "private endpoint Subnet Name"
 }
 
+variable "dbbi_subnet_address_name"{
+    type =string
+  description = "database bi/dw subnet name"
+
+} 
+variable "dbbi_subnet_address_prefix"{
+  type =string
+  description = "database bi/dw subnet IP address prefix"
+}
+
 
 variable "pe_subnet_address_prefix" {
   type = string
@@ -97,7 +132,12 @@ variable  "app_nsg_name"{
    type        = string
   description = "App SQL Name"
 }
-
+variable "asgwebservernames" {
+  type = string
+}
+variable "asgsqlservernames" {
+  
+}
 variable "environment" {
   type        = string
   description = "Environment"
@@ -110,43 +150,16 @@ variable "vm_dompassword" {
 
 # VM Variables
 
-variable "appvmcount" {
-  type=number
-  description = "number of vms to be created"
-}
-
 variable "apprg_name" {
     type=string
     description="Resource Group name for the application"
 }
 
-# variable "sql_vmname" {
-#     type = string
-#   description = "name of the SQL Virtual Machine. "
-# }
-variable "vmusername"{
-type=string
-description="VM user name"
 
-}
-
-variable "vmpassword"{
-type=string
-description="VM user pass"
-}
 #sql VM variable
 
-variable "vm_size_sql" {
-  description = "VM Size SQL Server"
- default = "Standard_DS3_v2"
- 
-}
 
-variable "vm_size_sqlmedium" {
-  description = "Medium VM Size SQL Server"
-  default="Standard_D8ds_v4"
-    
-}
+
 variable "vm_os_disk_delete_flag"{
   description = "Should the OS Disk (either the Managed Disk / VHD Blob) be deleted when the Virtual Machine is destroyed?"
   default     = "true"
@@ -195,8 +208,6 @@ description="dns server(s) for environment"
 }
 
 #Windows VM Variables
-
-
 variable "publisher_windows"{
   
   type = string
@@ -222,10 +233,7 @@ variable "version_windows" {
   
 }
  
- variable "appvm_names" {
-  type    = string
-description = "name of the web app servers"
-}
+
 
 # Keyvault variables
 
@@ -235,7 +243,10 @@ description = "sku for keyvault"
 }
 
 
-
+#  variable "kvsubresourcename" {
+#   type =list(string)
+   
+#  }
 variable "existingrgname" {
 
   type    = string
@@ -389,3 +400,16 @@ variable "rediscachelist" {
   description = "(Required) A list of Azure Linux Custom VM"
 }
 
+ 
+variable "wingenlist" {
+  type        = map(any)
+  description = "(Required) A list of Azure Windows Custom VM"
+}
+
+#private dns zone variables
+
+variable "privatednszonenames" {
+  type = list(map(string))
+ 
+  description = "(Required) A list of the privat dns zone names for the pass resources"
+}

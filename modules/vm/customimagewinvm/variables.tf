@@ -4,6 +4,12 @@ description="Existing app bkend Subnet ID"
 
 }
 
+variable "existingappsnetid" {
+type=string
+description="Existing app bkend Subnet ID"
+
+}
+
 variable "appbkendvmrg_name" {
     type=string
     description="Resource Group name for the application"
@@ -32,11 +38,6 @@ description="VM user pass"
 }
 
 
-# variable "cstwinvmsize"{
-
-#     type = string
-#     description = "VM Size for linux Virtual Machine"
-# }
 
 variable "win_source_image_id" {
   type = string
@@ -47,4 +48,22 @@ variable "win_source_image_id" {
 variable "wincstvmlist" {
   type        = map(any)
   description = "(Required) A list of Azure Windows Custom VM"
+}
+
+
+variable "domainname" {
+  
+}
+
+variable "oupath" {
+  
+}
+
+variable "domainusername" {
+  
+}
+
+variable "vm_dompassword" {
+  description = "Admin Password for the VM's"
+  sensitive   = true
 }

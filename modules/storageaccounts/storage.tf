@@ -20,3 +20,22 @@ resource "azurerm_storage_container" "container" {
   storage_account_name  = azurerm_storage_account.storage_account[each.value[0]].name
 }
 
+resource "azurerm_private_endpoint" "private_endpoint" {
+  for_each            = toset(var.storage_list)
+ name                = "pe-${each.value}"
+  location            = var.location
+  resource_group_name = var.existingrgname
+  subnet_id           = var.endpoints_subnet_id
+  private_service_connection {
+   name                           = "pe-${each.value}"
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_storage_account.storage_account[each.value].id
+    subresource_names              = ["blob"]
+  }
+
+  private_dns_zone_group {
+    name                 = "private-dns-zone-group"
+    private_dns_zone_ids = [var.stg_private_dns_zone_ids]
+  }
+
+}

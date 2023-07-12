@@ -18,16 +18,6 @@ variable "location" {
   default = "canadacentral"
 }
 
-variable "appvmcount" {
-  type = number
-  description = "number of vms to be created"
-}
-
-variable "appvm_names" {
-  type    = string
-
-}
-
 variable "vm_dompassword" {
   description = "Admin Password for the VM's"
   sensitive   = true
@@ -51,8 +41,6 @@ variable "vm_data_disk_delete_flag"{
   description = "Should the Data Disks (either the Managed Disks / VHD Blobs) be deleted when the Virtual Machine is destroyed?"
   default     = "true"
 }
-
-
 
 variable "publisher_windows"{
   
@@ -79,3 +67,24 @@ variable "version_windows" {
   
 }
  
+variable "asgwebserverid"{
+
+}
+
+ 
+variable "wingenlist" {
+  type        = map(any)
+  description = "(Required) A list of Azure Windows Custom VM"
+}
+
+variable "domainname" {
+  
+}
+
+variable "oupath" {
+  
+}
+
+variable "domainusername" {
+  
+}

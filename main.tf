@@ -1,9 +1,11 @@
-
+#resource group module
 module "resourcegroup_md" {
   source="./modules/resourcegroups"
   resource_groups = var.resource_groups
   location = var.location
 }
+
+#virtual network and subnet module
 module "vnet_md" {
   source = "./modules/vnet"
   vnetrgname = module.resourcegroup_md.vnetrgname
@@ -14,6 +16,8 @@ module "vnet_md" {
   app_subnet_address_name     = var.app_subnet_address_name
   db_subnet_address_prefix   = var.db_subnet_address_prefix
   db_subnet_address_name     = var.db_subnet_address_name
+  dbbi_subnet_address_name = var.dbbi_subnet_address_name
+  dbbi_subnet_address_prefix = var.dbbi_subnet_address_prefix
   appgw_subnet_address_prefix = var.appgw_subnet_address_prefix
   appgw_subnet_address_name   = var.appgw_subnet_address_name
   appbkend_subnet_address_prefix = var.appbkend_subnet_address_prefix
@@ -26,19 +30,34 @@ module "vnet_md" {
   sql_nsg_name=               var.sql_nsg_name
   app_nsg_name= var.app_nsg_name
   dnsservers=var.dnsservers
+  asgwebservernames = var.asgwebservernames
+  asgsqlservernames=var.asgsqlservernames
   
 }
 
+#module to create private dns zones depends on vnet module
+# module "privatednszones_md" {
+#   source="./modules/privatednszones"
+# privatednszonenames = var.privatednszonenames
+# existingrgname = module.resourcegroup_md.pergname
+# existingvnetid = module.vnet_md.vnet_id
+# depends_on = [ module.vnet_md ]
+# }
+
+#module to create storage account depends on private dns zones module
 # module "stgaccount_md" {
 #   source = "./modules/storageaccounts"
 #   storage_list = var.storage_list
 #   containers_list = var.containers_list
 #   existingrgname = module.resourcegroup_md.apprgname
-# depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
+#    endpoints_subnet_id = module.vnet_md.pe_subnet_id
+# stg_private_dns_zone_ids = module.privatednszones_md.privatednszoneidstorageid
+ 
+#  depends_on = [module.privatednszones_md]
   
 # }
 
-#generic windows vm module, comment out if needed
+#generic windows vm module, uncomment out if needed
 # module "vm_md" {
 # source = "./modules/vm/genericvm"
 # apprg_name=module.resourcegroup_md.apprgname
@@ -51,14 +70,18 @@ module "vnet_md" {
 # offer_windows =var.offer_windows
 # sku_windows = var.sku_windows
 # version_windows = var.version_windows
-# appvmcount = var.appvmcount
-# appvm_names = var.appvm_names
-#   depends_on = [module.resourcegroup_md,module.sql_md ]
+# wingenlist = var.wingenlist
+# asgwebserverid = module.vnet_md.asgwebserversid
+#   depends_on = [module.resourcegroup_md]
+#  domainname = var.domainname
+#  oupath = var.oupath
+#  domainusername = var.domainusername
+# vm_dompassword=var.vm_dompassword
+#  domainusername = var.domainusername
+#  asgsqlserverid = module.vnet_md.asgsqlserversid
 #  }
 
-#module to create vms from Azure SQL Server Market Place Image
-
-
+#module to create vms from Azure SQL Server Market Place Image uncomment if required, can deploy to separate subnet the dbsnet and dbbisnet
 # module "sql_md" {
 # source = "./modules/vm/sqlvm"
 # apprg_name=module.resourcegroup_md.apprgname
@@ -73,18 +96,23 @@ module "vnet_md" {
 # sqladmin=var.sqladmin
 # sqllogfilepath=var.sqllogfilepath
 # sqldatafilepath=var.sqldatafilepath
-# vm_size_sql=var.vm_size_sql
 #  environment = var.environment
 # existingdbsnetid=module.vnet_md.db_subnet_id
+# existingbisnetid=module.vnet_md.dbbi_subnet_id
 #  vm_dompassword=var.vm_dompassword
+#   domainname = var.domainname
+#  oupath = var.oupath
+#  domainusername = var.domainusername
+#  asgsqlserverid = module.vnet_md.asgsqlserversid
+
 #  }
 
-# root module for custom linux image
+# root module for custom linux image uncomment if required
 
 #  module "cstlinuxvm_md" {
 #   source ="./modules/vm/customimagelinuxvm"
 #   brstvmrg_name=module.resourcegroup_md.apprgname
-#   existingappbrstsnetid=module.vnet_md.appbrst_subnet_id
+#   existingappbrstsnetid=module.vnet_md.appbkend_subnet_id
 #   environment=var.environment
 #   source_image_id=var.source_image_id
 #   vmpassword = var.vmpassword
@@ -92,26 +120,41 @@ module "vnet_md" {
 #   lincstvmlist = var.lincstvmlist
 #   }
 
-
+#custom windows vm module can deploy vm to two different subnets appbrstsnet & appsnet
 #     module "cstwinvm_md"{
 #     source ="./modules/vm/customimagewinvm"
 #     appbkendvmrg_name = module.resourcegroup_md.apprgname
-#     existingappbkendsnetid=module.vnet_md.appbkend_subnet_id
+#     existingappbkendsnetid=module.vnet_md.appbrst_subnet_id
+#     existingappsnetid=module.vnet_md.app_subnet_id
 #     win_source_image_id = var.win_source_image_id
 #     vmpassword = var.vmpassword
 #     vmusername = var.vmusername
 #      environment=var.environment
 #      wincstvmlist = var.wincstvmlist
+#   vm_dompassword=var.vm_dompassword
+#   domainname = var.domainname
+#  oupath = var.oupath
+#  domainusername = var.domainusername
+
 #   }
 
+
+  
+
+# module to create keyvault depnes on private dnszones module
 # module "keyvault_md" {
 #   source = "./modules/keyvault"
 #   existingrgname=module.resourcegroup_md.apprgname
+
 #   kvsku_name = var.kvsku_name
 #   keyvaultlist = var.keyvaultlist
-#   depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
+#   endpoints_subnet_id = module.vnet_md.pe_subnet_id
+#   kv_private_dns_zone_ids = module.privatednszones_md.privatednszoneidkeyvaultid
+#   kv_private_dns_zone_name = module.privatednszones_md.privatednszoneidkeyvault
+#   depends_on = [module.privatednszones_md]
 # }
 
+#module to create application gateway depends on custom windows and linux modules
 # module "appgw_md"{
 # source="./modules/applicationgateway"
 # backend_address_pool_name=var.backend_address_pool_name
@@ -131,6 +174,8 @@ module "vnet_md" {
 #   depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
 # }
 
+
+#module to deploy to redish cache depends on private dns zone modules
 # module "redishcache_md" {
 #   source = "./modules/rediscache"
 #   capacity= var.capacity
@@ -138,6 +183,8 @@ module "vnet_md" {
 #   sku_name=var.sku_name
 #   existingrgname=module.resourcegroup_md.apprgname
 #   rediscachelist = var.rediscachelist
-#  depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
+#   rdc_private_dns_zone_ids=module.privatednszones_md.privatednszoneidrediscacheid
+#   endpoints_subnet_id = module.vnet_md.pe_subnet_id
+#  depends_on = [module.privatednszones_md]
 # }
 

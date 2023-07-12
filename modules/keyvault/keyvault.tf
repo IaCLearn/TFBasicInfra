@@ -15,6 +15,31 @@ resource "azurerm_key_vault" "keyvault" {
   purge_protection_enabled    = false
 
   sku_name = var.kvsku_name
+network_acls {
+    default_action = "Deny"
+    ip_rules       = []
+    bypass         ="AzureServices"
+  }
 
+}
+
+resource "azurerm_private_endpoint" "pekv" {
+  for_each = toset(var.keyvaultlist) 
+  name                = "pe-${each.value}"
+  location            = var.location
+  resource_group_name = var.existingrgname
+  subnet_id           = var.endpoints_subnet_id
+
+  private_service_connection {
+    name                           = "pe-${each.value}"
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_key_vault.keyvault[each.value].id
+    subresource_names              = ["redisCache"]
+  }
+
+  private_dns_zone_group {
+    name                 = "private-dns-zone-group"
+    private_dns_zone_ids = [var.kv_private_dns_zone_ids]
+  }
 
 }

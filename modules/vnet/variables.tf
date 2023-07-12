@@ -49,7 +49,10 @@ variable "db_subnet_address_prefix" {
 
 variable "db_subnet_address_name" {
 }
+variable "dbbi_subnet_address_name"{
 
+} 
+variable "dbbi_subnet_address_prefix"{}
 
 variable  "sql_nsg_name"{
 
@@ -64,4 +67,12 @@ variable "environment" {
 variable "dnsservers"{
   type        = list(string)
   default     = []
+}
+variable "asgwebservernames" {
+  type = string
+}
+
+  
+variable "asgsqlservernames" {
+  
 }

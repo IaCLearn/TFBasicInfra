@@ -1,10 +1,6 @@
 variable "existingrgname" {
 }
 
-# variable "access_policy_id" {
-# }
-
-
 variable "kvsku_name" {
   
 }
@@ -16,3 +12,17 @@ variable "keyvaultlist" {
   type = list
   
  }
+
+ variable "endpoints_subnet_id" {
+type = string
+}
+
+variable "kv_private_dns_zone_ids" {
+   type        = string
+
+}
+
+variable "kv_private_dns_zone_name" {
+  type = string
+  
+}

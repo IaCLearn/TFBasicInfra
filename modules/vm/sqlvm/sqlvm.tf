@@ -70,13 +70,17 @@ resource "azurerm_network_interface" "db-nic" {
 
   ip_configuration {
     name    = "${each.key}-ipconfig"
-    subnet_id     =var.existingdbsnetid
+    subnet_id="${each.value.subnetname}" == "dbsnet" ?  var.existingdbsnetid : "${each.value.subnetname}" == "dbbisnet" ? var.existingbisnetid:""
     private_ip_address_allocation = "Dynamic"
   }
 }
 
 
-
+resource "azurerm_network_interface_application_security_group_association" "asgsqlserverassoc" {
+    for_each = var.sqlvmlist
+  network_interface_id          =azurerm_network_interface.db-nic[each.key].id
+  application_security_group_id = var.asgsqlserverid
+}
 resource "azurerm_virtual_machine_extension" "vm_extension_modify_fw" {
      for_each = var.sqlvmlist
     name = "vm_modify_fw"
@@ -141,9 +145,9 @@ type_handler_version = "1.3"
 
 settings = <<SETTINGS
 {
-"Name": "phebsix.com",
-"OUPath":"OU=AzureVM,DC=phebsix,DC=com",
-"User": "localadmin@phebsix.com",
+"Name": "${var.domainname}",
+"OUPath":"${var.oupath != null ? var.oupath: ""}",
+"User": "${var.domainname}\\${var.domainusername}",
 "Restart": "true",
 "Options": "3"
 }

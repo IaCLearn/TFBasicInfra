@@ -4,11 +4,12 @@ description="Existing db Subnet ID"
 
 }
 
-# variable "existingappsnetid" {
-# type=string
-# description="Existing db Subnet ID"
 
-# }
+variable "existingbisnetid" {
+type=string
+description="Existing db Subnet ID"
+
+}
 
 variable "apprg_name" {
     type=string
@@ -24,37 +25,11 @@ variable "location" {
   default = "canadacentral"
 }
 
-# variable "appvmcount" {
-#   type = number
-#   description = "number of vms to be created"
-# }
 
-# variable "appvm_names" {
-#   type    = string
 
-# }
 
-# variable "sql_vmname" {
-#     type= string
-#   description = "name of the SQL Virtual Machine."
-# }
 
-variable "vm_dompassword" {
-  description = "Admin Password for the VM's"
-  sensitive   = true
-}
 
-variable "vm_size_sql" {
-  description = "VM Size SQL Server"
- default = "Standard_DS3_v2"
- 
-}
-
-variable "vm_size_sqlmedium" {
-  description = "Medium VM Size SQL Server"
-  default="Standard_D8ds_v4"
-    
-}
 
 variable "vmusername"{
 type=string
@@ -110,4 +85,25 @@ variable "image_version_sql" {
 variable "sqlvmlist" {
   type        = map(any)
   description = "(Required) A list of Azure Virtual Machines"
+}
+
+variable "asgsqlserverid" {
+  
+}
+
+variable "domainname" {
+  
+}
+
+variable "oupath" {
+  
+}
+
+variable "domainusername" {
+  
+}
+
+variable "vm_dompassword" {
+  description = "Admin Password for the VM's"
+  sensitive   = true
 }

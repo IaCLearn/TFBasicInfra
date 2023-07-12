@@ -51,6 +51,15 @@ resource "azurerm_subnet" "db_subnet" {
   address_prefixes = [var.db_subnet_address_prefix]
 }
 
+
+
+resource "azurerm_subnet" "dbbi_subnet" {
+  name = var.dbbi_subnet_address_name
+  resource_group_name = var.vnetrgname
+  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  address_prefixes = [var.dbbi_subnet_address_prefix]
+}
+
 resource "azurerm_subnet" "appgw_subnet" {
   name = var.appgw_subnet_address_name
  resource_group_name = var.vnetrgname
@@ -133,7 +142,8 @@ resource "azurerm_network_security_rule" "sql" {
   source_port_range           = "*"
   destination_port_range      = "1433"
   source_address_prefix   = "*"
-  destination_address_prefix  = "*"
+  //destination_address_prefix  = "*"
+  destination_application_security_group_ids =[ azurerm_application_security_group.asgsqlservers.id]
    resource_group_name = var.vnetrgname
   network_security_group_name = azurerm_network_security_group.nsg_sql.name
 }
@@ -147,10 +157,29 @@ resource "azurerm_network_security_rule" "app" {
   source_port_range           = "*"
   destination_port_range      = "443"
   source_address_prefix   = "*"
-  destination_address_prefix  = "*"
+  //destination_address_prefix  = "*"
+  destination_application_security_group_ids =[ azurerm_application_security_group.asgwebservers.id]
    resource_group_name = var.vnetrgname
   network_security_group_name = azurerm_network_security_group.nsg_app.name
 }
+
+
+resource "azurerm_application_security_group" "asgwebservers" {
+  name                = var.asgwebservernames
+  location=var.location
+   resource_group_name = var.vnetrgname
+
+}
+
+
+resource "azurerm_application_security_group" "asgsqlservers" {
+  name                = var.asgsqlservernames
+  location=var.location
+   resource_group_name = var.vnetrgname
+
+}
+
+
 
 resource "azurerm_route_table" "RT_OnPrem" {
     count = var.environment != "Development" ? 1 : 0 

@@ -57,17 +57,17 @@ depends_on = [ module.vnet_md ]
 }
 
 #module to create storage account depends on private dns zones module
-module "stgaccount_md" {
-  source = "./modules/storageaccounts"
-  storage_list = var.storage_list
-  containers_list = var.containers_list
-  existingrgname = module.resourcegroup_md.apprgname
-   endpoints_subnet_id = module.vnet_md.pe_subnet_id
-stg_private_dns_zone_ids = module.privatednszones_md.privatednszoneidstorageid
+# module "stgaccount_md" {
+#   source = "./modules/storageaccounts"
+#   storage_list = var.storage_list
+#   containers_list = var.containers_list
+#   existingrgname = module.resourcegroup_md.apprgname
+#    endpoints_subnet_id = module.vnet_md.pe_subnet_id
+# stg_private_dns_zone_ids = module.privatednszones_md.privatednszoneidstorageid
  
- depends_on = [module.privatednszones_md]
+#  depends_on = [module.privatednszones_md]
   
-}
+# }
 
 #generic windows vm module, uncomment out if needed
 # module "vm_md" {
@@ -173,51 +173,51 @@ depends_on = [ module.privatednszones_md ]
   
 
 # module to create keyvault depnes on private dnszones module
-module "keyvault_md" {
-  source = "./modules/keyvault"
-  existingrgname=module.resourcegroup_md.apprgname
+# module "keyvault_md" {
+#   source = "./modules/keyvault"
+#   existingrgname=module.resourcegroup_md.apprgname
 
-  kvsku_name = var.kvsku_name
-  keyvaultlist = var.keyvaultlist
-  endpoints_subnet_id = module.vnet_md.pe_subnet_id
-  kv_private_dns_zone_ids = module.privatednszones_md.privatednszoneidkeyvaultid
-  kv_private_dns_zone_name = module.privatednszones_md.privatednszoneidkeyvault
-  depends_on = [module.privatednszones_md]
-}
+#   kvsku_name = var.kvsku_name
+#   keyvaultlist = var.keyvaultlist
+#   endpoints_subnet_id = module.vnet_md.pe_subnet_id
+#   kv_private_dns_zone_ids = module.privatednszones_md.privatednszoneidkeyvaultid
+#   kv_private_dns_zone_name = module.privatednszones_md.privatednszoneidkeyvault
+#   depends_on = [module.privatednszones_md]
+# }
 
 //module to create application gateway depends on custom windows and linux modules
-module "appgw_md"{
-source="./modules/applicationgateway"
-backend_address_pool_name=var.backend_address_pool_name
-frontend_port_name=var.frontend_port_name
-http_setting_name=var.http_setting_name
-listener_name=var.listener_name
-request_routing_rule_name=var.request_routing_rule_name
-appgwipconfigname=var.appgwpip
-frontend_ip_configuration_name=var.frontend_ip_configuration_name
-private_frontend_ip_configuration_name = var.private_frontend_ip_configuration_name
-appgwname=module.resourcegroup_md.apprgname
-appgwpip=var.appgwpip
-existingrgname=var.existingrgname
-existingappgwsubnetid =  module.vnet_md.appgw_subnet_id
-backendaddresspoolfqdns = var.backendaddresspoolfqdns
-backend_address_pool_name1 = var.backend_address_pool_name1
-backendaddresspoolfqdns1 = var.backendaddresspoolfqdns1
-appgwprivateip=var.appgwprivateip
-  depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
-}
+# module "appgw_md"{
+# source="./modules/applicationgateway"
+# backend_address_pool_name=var.backend_address_pool_name
+# frontend_port_name=var.frontend_port_name
+# http_setting_name=var.http_setting_name
+# listener_name=var.listener_name
+# request_routing_rule_name=var.request_routing_rule_name
+# appgwipconfigname=var.appgwpip
+# frontend_ip_configuration_name=var.frontend_ip_configuration_name
+# private_frontend_ip_configuration_name = var.private_frontend_ip_configuration_name
+# appgwname=module.resourcegroup_md.apprgname
+# appgwpip=var.appgwpip
+# existingrgname=var.existingrgname
+# existingappgwsubnetid =  module.vnet_md.appgw_subnet_id
+# backendaddresspoolfqdns = var.backendaddresspoolfqdns
+# backend_address_pool_name1 = var.backend_address_pool_name1
+# backendaddresspoolfqdns1 = var.backendaddresspoolfqdns1
+# appgwprivateip=var.appgwprivateip
+#   depends_on = [module.cstlinuxvm_md,module.cstwinvm_md]
+# }
 
 
 #module to deploy to redish cache depends on private dns zone modules
-module "redishcache_md" {
-  source = "./modules/rediscache"
-  capacity= var.capacity
-  redisfamily=var.redisfamily
-  sku_name=var.sku_name
-  existingrgname=module.resourcegroup_md.apprgname
-  rediscachelist = var.rediscachelist
-  rdc_private_dns_zone_ids=module.privatednszones_md.privatednszoneidrediscacheid
-  endpoints_subnet_id = module.vnet_md.pe_subnet_id
- depends_on = [module.privatednszones_md]
-}
+# module "redishcache_md" {
+#   source = "./modules/rediscache"
+#   capacity= var.capacity
+#   redisfamily=var.redisfamily
+#   sku_name=var.sku_name
+#   existingrgname=module.resourcegroup_md.apprgname
+#   rediscachelist = var.rediscachelist
+#   rdc_private_dns_zone_ids=module.privatednszones_md.privatednszoneidrediscacheid
+#   endpoints_subnet_id = module.vnet_md.pe_subnet_id
+#  depends_on = [module.privatednszones_md]
+# }
 

@@ -216,27 +216,27 @@ azurerm_windows_virtual_machine.cstwininst
 }
 
 
-resource "azurerm_virtual_machine_extension" "windomjoin" {
-for_each = var.wincstvmlist
-name ="${each.key}domjoin"
-virtual_machine_id = azurerm_windows_virtual_machine.cstwininst[each.key].id
-publisher = "Microsoft.Compute"
-type = "JsonADDomainExtension"
-type_handler_version = "1.3"
+# resource "azurerm_virtual_machine_extension" "windomjoin" {
+# for_each = var.wincstvmlist
+# name ="${each.key}domjoin"
+# virtual_machine_id = azurerm_windows_virtual_machine.cstwininst[each.key].id
+# publisher = "Microsoft.Compute"
+# type = "JsonADDomainExtension"
+# type_handler_version = "1.3"
 
-settings = <<SETTINGS
-{
-"Name": "${var.domainname}",
-"OUPath":"${var.oupath != null ? var.oupath: ""}",
-"User": "${var.domainname}\\${var.domainusername}",
-"Restart": "true",
-"Options": "3"
-}
-SETTINGS
-protected_settings = <<PROTECTED_SETTINGS
-{
-"Password": "${var.vm_dompassword}"
-}
-PROTECTED_SETTINGS
- depends_on = [azurerm_windows_virtual_machine.cstwininst,azurerm_virtual_machine_extension.winvm_extension_modify_fw]
-}
+# settings = <<SETTINGS
+# {
+# "Name": "${var.domainname}",
+# "OUPath":"${var.oupath != null ? var.oupath: ""}",
+# "User": "${var.domainname}\\${var.domainusername}",
+# "Restart": "true",
+# "Options": "3"
+# }
+# SETTINGS
+# protected_settings = <<PROTECTED_SETTINGS
+# {
+# "Password": "${var.vm_dompassword}"
+# }
+# PROTECTED_SETTINGS
+#  depends_on = [azurerm_windows_virtual_machine.cstwininst,azurerm_virtual_machine_extension.winvm_extension_modify_fw]
+# }

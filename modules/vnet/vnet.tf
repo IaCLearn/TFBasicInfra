@@ -139,9 +139,22 @@ resource "azurerm_network_security_group" "nsg_sql" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "1433"
-  source_address_prefix   = "*"
-  //destination_address_prefix  = "*"
+ // source_address_prefix   = "*"
+  source_address_prefixes = [var.app_subnet_address_prefix ,var.appbrst_subnet_address_prefix]
+  
   destination_application_security_group_ids =[ azurerm_application_security_group.asgsqlservers.id]
+  }
+  security_rule {
+   name                        = "Allow_RDP_VPN"
+  priority                    = 120
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3389"
+  source_address_prefix    = var.mrz_subnet_address_prefix
+  //destination_address_prefix  = "*"
+  destination_application_security_group_ids =[azurerm_application_security_group.asgwebservers.id]
   }
 }
 
@@ -170,7 +183,7 @@ resource "azurerm_network_security_group" "nsg_presentation" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "80"
-  source_address_prefix   = "*"
+  source_address_prefix   = var.appgw_subnet_address_prefix
   destination_application_security_group_ids =[azurerm_application_security_group.asgwebservers.id]
 
   }
@@ -188,7 +201,7 @@ resource "azurerm_network_security_group" "nsg_coris" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "443"
-  source_address_prefix   = "*"
+  source_address_prefix   = var.appgw_subnet_address_prefix
   destination_application_security_group_ids =[azurerm_application_security_group.asgcorisservers.id]
 
   }
@@ -200,7 +213,7 @@ resource "azurerm_network_security_group" "nsg_appbrst" {
   resource_group_name = var.vnetrgname
   security_rule {
 
-  name                        = "Allow_RDP_VPN"
+  name                        = "Allow_Ports"
   priority                    = 110
   direction                   = "Inbound"
   access                      = "Allow"
@@ -238,7 +251,7 @@ resource "azurerm_network_security_group" "nsg_jumbpox" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "3389"
-  source_address_prefix    = "*"
+  source_address_prefix    = var.appgw_subnet_address_prefix
     destination_application_security_group_ids =[azurerm_application_security_group.asgjmpservers.id]
   }
 }
@@ -266,7 +279,7 @@ resource "azurerm_network_security_group" "nsg_inrule" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "80"
-  source_address_prefix   = "*"
+  source_address_prefix   = var.appgw_subnet_address_prefix
   destination_application_security_group_ids =[azurerm_application_security_group.asginruleservers.id]
 
   }

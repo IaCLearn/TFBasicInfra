@@ -46,6 +46,10 @@ resource "azurerm_application_gateway" "appgw" {
     name = var.backend_address_pool_name
     fqdns = var.backendaddresspoolfqdns
   }
+   backend_address_pool {
+    name = var.backend_address_pool_name1
+    fqdns = var.backendaddresspoolfqdns1
+  }
 
   backend_http_settings {
     name                  = var.http_setting_name

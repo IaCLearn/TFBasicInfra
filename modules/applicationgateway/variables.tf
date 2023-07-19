@@ -59,3 +59,12 @@ variable "backendaddresspoolfqdns" {
  variable "appgwprivateip" {
    
  }
+
+ variable "backend_address_pool_name1" {
+   
+ }
+
+ variable "backendaddresspoolfqdns1" {
+     type = list
+  
+ }

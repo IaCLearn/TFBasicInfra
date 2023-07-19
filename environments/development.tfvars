@@ -15,12 +15,24 @@ pe_subnet_address_name="pesnet"
 pe_subnet_address_prefix="192.168.5.0/24"
 dbbi_subnet_address_name="dbbisnet"
 dbbi_subnet_address_prefix="192.168.8.0/24"
+mrz_subnet_address_name="mrzsnet"
+mrz_subnet_address_prefix="192.168.9.0/24"
+inrule_subnet_address_name="inrulesnet"
+inrule_subnet_address_prefix="192.168.10.0/24"
 location="canadacentral"
 sql_nsg_name="sql_nsg"
 app_nsg_name="app_nsg"
+jmpbox_nsg_name="jmpbox_nsg"
+corris_nsg_name="corris_nsg"
+appbrst_nsg_name="burst_nsg"
+inrule_nsg_name="inrule_nsg"
 environment = "Development"
 asgwebservernames="asgWebservers"
 asgsqlservernames="asgsqlservers"
+asgjmpservernames="asgjmpservers"
+asgcorisservernames="asgcorisservernames"
+asgbrstservernames="asgbrstservernames"
+asginruleservernames="asginruleservernames"
 dnsservers=["10.0.0.4"]
 
 #Web app vm creation generic windows vm
@@ -53,7 +65,9 @@ frontend_ip_configuration_name="myAGIPConfig"
 appgwname="myAppGateway"
 appgwpip="myAGPublicIPAddress"
 private_frontend_ip_configuration_name="myAGPrivateIPAddress"
-backendaddresspoolfqdns=["linuxvm01.phebsix.com","linuxvm02.phebsix.com"]
+backendaddresspoolfqdns=["linuxvm01.phebsix.com"]
+backendaddresspoolfqdns1=["linuxvm02.phebsix.com"]
+backend_address_pool_name1="myBackendPool1"
 appgwprivateip="192.168.1.10"
 
 #Azure Redis Cache configuration variable
@@ -88,7 +102,7 @@ resource_groups=[
 ]
 
 
-# SQL VM General creation
+# SQL VM General creation using the sql market place image and with the SQL Module
 apprg_name="sqlvmsrg"
 publisher_sql="MicrosoftSQLServer"
 offer_sql="sql2019-ws2019"
@@ -120,43 +134,62 @@ sqlvmlist={
 }
 
 #General variables for custom linux image
-source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/cstlinuxvm/versions/0.0.1"
 brstvmrg_name="sqlvmsrg"
 
 #customlinux vm list
 lincstvmlist={
-linuxvm01={
-    size="Standard_D8ds_v4",
-    datadisksize="512"
+csDcOms1Web02vm={
+   size="Standard_D8ds_v4",
+    subnetname="appsnet"
+    osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/cstlinuxvm/versions/0.0.1"
   }
-  linuxvm02={
-    size="Standard_D8ds_v4",
-    datadisksize="512"
-   
-  }
-    linuxvm03={
-    size="Standard_D8ds_v4",
-    datadisksize="512"
-  
-  }
+
 }
 
-#Azure Custom Windows 
+#Azure Custom Windows variables
 appbkendvmrg_name="sqlvmsrg"
-win_source_image_id="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
 wincstvmlist={
-wincstvm01={
+csDcOms1Jmp01vm={
     size="Standard_D8ds_v4",
-    datadisksize="512",
-    subnetname="appbrstsnet"
-  }
-  wincstvm02={
+    subnetname="mrzsnet"
+    osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
+
+ }
+
+ csDcOms1Web01vm={
+  installIIS=true
     size="Standard_D8ds_v4",
-    datadisksize="512",
     subnetname="appsnet"
-   
+    osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
+
+ }
+  csDcOms1Svc01vm={
+    size="Standard_D8ds_v4",
+    subnetname="corissnet"
+    osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
   }
-    
+   csDcOms1Svc02vm={
+    size="Standard_D8ds_v4",
+    subnetname="appbrstsnet"
+    logdisks=120
+    osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
+  }
+  csDcOms1Sql01vm={
+    size="Standard_D8ds_v4",
+    subnetname="dbsnet"
+      logdisks=120
+      datadisk=120
+      tempdbdisk=120
+      osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
+  }
+    csDcOms1Sql04vm={
+    size="Standard_D8ds_v4",
+    subnetname="dbbisnet"
+    logdisks=120
+      datadisk=120
+      tempdbdisk=120
+      osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
+  }
 }
 
 #Windows generic list add more list if required

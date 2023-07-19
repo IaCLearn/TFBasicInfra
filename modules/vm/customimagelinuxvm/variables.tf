@@ -1,8 +1,11 @@
-variable "existingappbrstsnetid" {
+variable "existingappsnetid" {
 type=string
 description="Existing db Subnet ID"
 
 }
+
+
+
 
 variable "brstvmrg_name" {
     type=string
@@ -33,14 +36,22 @@ description="VM user pass"
 }
 
 
-
-variable "source_image_id" {
-  type = string
-  description = "vm source image id"
-  
+variable "lincstvmlist"{
+ type = map(object({
+        size = string
+       subnetname=string
+       osimageid=string
+       
+    }))
+    default={}
 }
 
- variable "lincstvmlist" {
-  type        = map(any)
-  description = "(Required) A list of Azure Linux Custom VM"
+
+
+
+variable "app_subnet_address_name" {
+}
+
+variable "asgwebserversid" {
+  
 }

@@ -20,6 +20,12 @@ output "pe_subnet_id"{
 output "dbbi_subnet_id"{
   value =azurerm_subnet.dbbi_subnet.id
 }
+
+
+output "mrz_subnet_id"{
+  value =azurerm_subnet.mrz_subnet.id
+}
+
 output "vnet_id" {
   value = azurerm_virtual_network.virtual_network.id
 }
@@ -34,7 +40,7 @@ output "sqlnsg_name" {
 }
 
 output "appnsg_name" {
-  value =  azurerm_network_security_group.nsg_app.id
+  value =  azurerm_network_security_group.nsg_presentation.id
 }
 
 
@@ -45,5 +51,22 @@ output "asgwebserversid" {
 output "asgsqlserversid" {
   value = azurerm_application_security_group.asgsqlservers.id
 }
+
+output "asgjmpserversid" {
+  value = azurerm_application_security_group.asgjmpservers.id
+}
+
+output "asgcorrisserversid" {
+  value = azurerm_application_security_group.asgcorisservers.id
+}
+
+
+output "asgbrstserversid" {
+  value = azurerm_application_security_group.asgbrstservers.id
+}
+
+
+
+
 
 

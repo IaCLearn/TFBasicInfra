@@ -119,10 +119,26 @@ variable "dbbi_subnet_address_prefix"{
 }
 
 
+variable "mrz_subnet_address_name"{
+  type =string
+  description = "MRZ subnet"
+
+} 
+variable "mrz_subnet_address_prefix"{
+  type =string
+  description = "MRZ subnet prefix"
+}
+
 variable "pe_subnet_address_prefix" {
   type = string
   description = "private endpoint address prefix"
 }
+
+
+variable "inrule_subnet_address_name"{
+
+} 
+variable "inrule_subnet_address_prefix"{}
 variable  "sql_nsg_name"{
    type        = string
   description = "NSG SQL Name"
@@ -130,13 +146,52 @@ variable  "sql_nsg_name"{
 
 variable  "app_nsg_name"{
    type        = string
-  description = "App SQL Name"
+  description = "App NSG Name"
+}
+variable "appbrst_nsg_name" {
+  type        = string
+  description = "Burst NSG NAME"
+}
+
+variable "corris_nsg_name" {
+  type = string
+  description = "Corris Nsg Name"
+}
+variable "jmpbox_nsg_name" {
+  type = string
+  description = "Jump box NSG SQL"
+  
+}
+variable "inrule_nsg_name" {
+  type = string
+  description = "In rule server jump box"
 }
 variable "asgwebservernames" {
   type = string
+  description = "asg for webservers"
 }
 variable "asgsqlservernames" {
-  
+  type = string
+  description = "asg for sql servers"
+}
+
+variable "asgjmpservernames" {
+type = string
+description = "asg for jump boxes"
+}
+
+variable "asgbrstservernames" {
+  type = string
+  description = "asg for burst server names"
+}
+
+variable "asgcorisservernames" {
+  type = string
+  description = "asg for corris servers"
+}
+variable "asginruleservernames" {
+   type = string
+  description = "asg for inrule servers"
 }
 variable "environment" {
   type        = string
@@ -262,6 +317,13 @@ variable "backend_address_pool_name" {
     description = "backend pool address name"
 
 }
+
+variable "backend_address_pool_name1" {
+    
+    type =string
+    description = "backend pool address name"
+
+}
 variable "private_frontend_ip_configuration_name" {
   
 }
@@ -315,6 +377,11 @@ variable "backendaddresspoolfqdns" {
   type = list
   
  }
+ variable "backendaddresspoolfqdns1" {
+  type = list
+  
+ }
+
 
 
 #Azure redis cache
@@ -342,12 +409,6 @@ variable "backendaddresspoolfqdns" {
  }
 
  #custom linux image variables
-variable "source_image_id" {
-  type = string
-  description = "vm source image id"
-  
-}
-
 variable "brstvmrg_name" {
     type=string
     description="Resource Group name for the application"
@@ -363,11 +424,11 @@ variable "appbkendvmrg_name" {
 
 
 
-variable "win_source_image_id" {
-  type = string
-  description = "vm source image id"
+# variable "win_source_image_id" {
+#   type = string
+#   description = "vm source image id"
   
-}
+# }
 
 
 variable "resource_groups" {
@@ -390,16 +451,36 @@ variable "rediscachelist" {
   description = "(Required) A list of Azure Virtual Machines"
 }
 
- variable "wincstvmlist" {
-  type        = map(any)
-  description = "(Required) A list of Azure Windows Custom VM"
+
+
+variable "wincstvmlist"{
+ type = map(object({
+        size = string
+       subnetname=string
+       osimageid=string
+        logdisks =optional(number)
+        logdiskname=optional(string)
+        datadisk=optional(number)
+        datadiskname=optional(string)
+        tempdbdisk=optional(number)
+        tempdbdiskname=optional(string)
+        installIIS=optional(bool)
+    }))
+    default={}
 }
 
- variable "lincstvmlist" {
-  type        = map(any)
-  description = "(Required) A list of Azure Linux Custom VM"
-}
 
+
+
+variable "lincstvmlist"{
+ type = map(object({
+        size = string
+       subnetname=string
+       osimageid=string
+       
+    }))
+    default={}
+}
  
 variable "wingenlist" {
   type        = map(any)

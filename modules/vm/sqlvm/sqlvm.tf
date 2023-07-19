@@ -70,7 +70,7 @@ resource "azurerm_network_interface" "db-nic" {
 
   ip_configuration {
     name    = "${each.key}-ipconfig"
-    subnet_id="${each.value.subnetname}" == "dbsnet" ?  var.existingdbsnetid : "${each.value.subnetname}" == "dbbisnet" ? var.existingbisnetid:""
+    subnet_id="${each.value.subnetname}" == var.db_subnet_address_name ?  var.existingdbsnetid : "${each.value.subnetname}" == var.dbbi_subnet_address_name ? var.existingbisnetid:""
     private_ip_address_allocation = "Dynamic"
   }
 }

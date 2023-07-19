@@ -25,12 +25,6 @@ variable "location" {
   default = "canadacentral"
 }
 
-
-
-
-
-
-
 variable "vmusername"{
 type=string
 description="VM user name"
@@ -107,3 +101,10 @@ variable "vm_dompassword" {
   description = "Admin Password for the VM's"
   sensitive   = true
 }
+
+variable "db_subnet_address_name" {
+}
+variable "dbbi_subnet_address_name"{
+
+} 
+

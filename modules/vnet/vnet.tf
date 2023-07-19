@@ -88,53 +88,51 @@ resource "azurerm_subnet" "pe_subnet" {
   address_prefixes = [var.pe_subnet_address_prefix]
 }
 
+resource "azurerm_subnet" "mrz_subnet" {
+  name = var.mrz_subnet_address_name
+   resource_group_name = var.vnetrgname
+  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  address_prefixes = [var.mrz_subnet_address_prefix]
+}
+
+resource "azurerm_subnet" "inrule_subnet" {
+  name = var.inrule_subnet_address_name
+   resource_group_name = var.vnetrgname
+  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  address_prefixes = [var.inrule_subnet_address_prefix]
+}
+
+
+
+
+#appbkend_subnet (Corris Services subnet)
+resource "azurerm_subnet_network_security_group_association" "nsg_corris" {
+  subnet_id = azurerm_subnet.appbkend_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg_coris.id
+
+  depends_on = [
+    azurerm_subnet.app_subnet,azurerm_network_security_group.nsg_coris
+  ]
+}
+
+
+resource "azurerm_subnet_network_security_group_association" "nsg_inrule" {
+  subnet_id = azurerm_subnet.inrule_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg_inrule.id
+
+  depends_on = [
+    azurerm_subnet.appbkend_subnet, azurerm_network_security_group.nsg_inrule
+  ]
+}
+
+
+
 resource "azurerm_network_security_group" "nsg_sql" {
   name = var.sql_nsg_name
   resource_group_name = var.vnetrgname
   location = var.location
-}
-
-
-resource "azurerm_network_security_group" "nsg_app" {
-  name = var.app_nsg_name
-  location = var.location
-  resource_group_name = var.vnetrgname
-}
-
-resource "azurerm_subnet_network_security_group_association" "nsg_sql" {
-  subnet_id = azurerm_subnet.db_subnet.id
-  network_security_group_id = azurerm_network_security_group.nsg_sql.id
-
-  depends_on = [
-  azurerm_subnet.db_subnet, azurerm_network_security_group.nsg_sql
-  ]
-}
-
-resource "azurerm_subnet_network_security_group_association" "nsg_app" {
-  subnet_id = azurerm_subnet.app_subnet.id
-  network_security_group_id = azurerm_network_security_group.nsg_app.id
-
-  depends_on = [
-    azurerm_subnet.app_subnet, azurerm_network_security_group.nsg_app
-  ]
-}
-
-resource "azurerm_network_security_rule" "rdp_sql" {
-  name                        = "Allow_RDP_VPN"
-  priority                    = 100
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "3389"
-  source_address_prefix    = "*"
-  destination_address_prefix  = "*"
-  resource_group_name = var.vnetrgname
-  network_security_group_name = azurerm_network_security_group.nsg_sql.name
-}
-
-resource "azurerm_network_security_rule" "sql" {
-  name                        = "Allow_App_SQL"
+  security_rule {
+   name                        = "Allow_App_SQL"
   priority                    = 110
   direction                   = "Inbound"
   access                      = "Allow"
@@ -144,12 +142,46 @@ resource "azurerm_network_security_rule" "sql" {
   source_address_prefix   = "*"
   //destination_address_prefix  = "*"
   destination_application_security_group_ids =[ azurerm_application_security_group.asgsqlservers.id]
-   resource_group_name = var.vnetrgname
-  network_security_group_name = azurerm_network_security_group.nsg_sql.name
+  }
 }
 
-resource "azurerm_network_security_rule" "app" {
-  name                        = "Allow_App_Https"
+
+resource "azurerm_network_security_group" "nsg_presentation" {
+  name = var.app_nsg_name
+  location = var.location
+  resource_group_name = var.vnetrgname
+  security_rule {
+   name                        = "Allow_RDP_VPN"
+  priority                    = 110
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3389"
+  source_address_prefix    = "*"
+  //destination_address_prefix  = "*"
+  destination_application_security_group_ids =[azurerm_application_security_group.asgwebservers.id]
+  }
+   security_rule  {
+  name                        = "Allow_App_Http"
+  priority                    = 120
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix   = "*"
+  destination_application_security_group_ids =[azurerm_application_security_group.asgwebservers.id]
+
+  }
+}
+
+resource "azurerm_network_security_group" "nsg_coris" {
+  name = var.corris_nsg_name
+  location = var.location
+  resource_group_name = var.vnetrgname
+  security_rule {
+      name                        = "Allow_App_Https"
   priority                    = 110
   direction                   = "Inbound"
   access                      = "Allow"
@@ -157,12 +189,152 @@ resource "azurerm_network_security_rule" "app" {
   source_port_range           = "*"
   destination_port_range      = "443"
   source_address_prefix   = "*"
-  //destination_address_prefix  = "*"
-  destination_application_security_group_ids =[ azurerm_application_security_group.asgwebservers.id]
-   resource_group_name = var.vnetrgname
-  network_security_group_name = azurerm_network_security_group.nsg_app.name
+  destination_application_security_group_ids =[azurerm_application_security_group.asgcorisservers.id]
+
+  }
 }
 
+resource "azurerm_network_security_group" "nsg_appbrst" {
+  name = var.appbrst_nsg_name
+  location = var.location
+  resource_group_name = var.vnetrgname
+  security_rule {
+
+  name                        = "Allow_RDP_VPN"
+  priority                    = 110
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_ranges = [6105,6109,6120,6711,6751]
+  source_address_prefix    = "*"
+  destination_application_security_group_ids =[azurerm_application_security_group.asgbrstservers.id]
+
+  }
+  security_rule  {
+  name                        = "Allow_App_Https"
+  priority                    = 120
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix   = "*"
+  destination_application_security_group_ids =[azurerm_application_security_group.asgbrstservers.id]
+
+  }
+}
+
+
+resource "azurerm_network_security_group" "nsg_jumbpox" {
+  name = var.jmpbox_nsg_name
+  resource_group_name = var.vnetrgname
+  location = var.location
+  security_rule {
+   name                        = "Allow_RDP_VPN"
+  priority                    = 110
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3389"
+  source_address_prefix    = "*"
+    destination_application_security_group_ids =[azurerm_application_security_group.asgjmpservers.id]
+  }
+}
+
+resource "azurerm_network_security_group" "nsg_inrule" {
+  name = var.inrule_nsg_name
+  resource_group_name = var.vnetrgname
+  location = var.location
+   security_rule {
+   name                        = "Allow_RDP_VPN"
+  priority                    = 110
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3389"
+  source_address_prefix    = "*"
+    destination_application_security_group_ids =[azurerm_application_security_group.asginruleservers.id]
+  }
+   security_rule  {
+  name                        = "Allow_App_Http"
+  priority                    = 120
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix   = "*"
+  destination_application_security_group_ids =[azurerm_application_security_group.asginruleservers.id]
+
+  }
+  
+}
+
+
+#NSG Association 
+resource "azurerm_subnet_network_security_group_association" "nsg_jumbpox" {
+  subnet_id = azurerm_subnet.mrz_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg_jumbpox.id
+
+  depends_on = [
+  azurerm_subnet.mrz_subnet, azurerm_network_security_group.nsg_jumbpox
+  ]
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg_sql" {
+  subnet_id = azurerm_subnet.db_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg_sql.id
+
+
+  depends_on = [
+  azurerm_subnet.db_subnet, azurerm_network_security_group.nsg_sql
+  ]
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg_sql1" {
+  subnet_id = azurerm_subnet.dbbi_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg_sql.id
+
+
+  depends_on = [
+  azurerm_subnet.dbbi_subnet, azurerm_network_security_group.nsg_sql
+  ]
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg_presentation" {
+  subnet_id = azurerm_subnet.app_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg_presentation.id
+
+  depends_on = [
+    azurerm_subnet.app_subnet, azurerm_network_security_group.nsg_presentation
+  ]
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg_appbrst" {
+  subnet_id = azurerm_subnet.appbrst_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg_appbrst.id
+
+  depends_on = [
+    azurerm_subnet.app_subnet, azurerm_network_security_group.nsg_appbrst
+  ]
+}
+
+resource "azurerm_application_security_group" "asgjmpservers" {
+  name                = var.asgjmpservernames
+  location=var.location
+   resource_group_name = var.vnetrgname
+
+}
+
+resource "azurerm_application_security_group" "asginruleservers" {
+  name                = var.asginruleservernames
+  location=var.location
+   resource_group_name = var.vnetrgname
+
+}
 
 resource "azurerm_application_security_group" "asgwebservers" {
   name                = var.asgwebservernames
@@ -170,7 +342,19 @@ resource "azurerm_application_security_group" "asgwebservers" {
    resource_group_name = var.vnetrgname
 
 }
+resource "azurerm_application_security_group" "asgcorisservers" {
+  name                = var.asgcorisservernames
+  location=var.location
+   resource_group_name = var.vnetrgname
 
+}
+
+resource "azurerm_application_security_group" "asgbrstservers" {
+  name                = var.asgbrstservernames
+  location=var.location
+   resource_group_name = var.vnetrgname
+
+}
 
 resource "azurerm_application_security_group" "asgsqlservers" {
   name                = var.asgsqlservernames
@@ -178,6 +362,7 @@ resource "azurerm_application_security_group" "asgsqlservers" {
    resource_group_name = var.vnetrgname
 
 }
+
 
 
 

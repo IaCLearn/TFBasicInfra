@@ -65,21 +65,12 @@ description="VM user pass"
 
 
 
-# variable "win_source_image_id" {
-#   type = string
-#   description = "vm source image id"
-  
-# }
-
-# variable "wincstvmlist" {
-#   type        = map(any)
-#   description = "(Required) A list of Azure Windows Custom VM"
-# }
 variable "wincstvmlist"{
  type = map(object({
         size = string
        subnetname=string
        osimageid=string
+       type=string//presentation,inrule, coris, sql, brst,jumpbox
         logdisks =optional(number)
         logdiskname=optional(string)
         datadisk=optional(number)

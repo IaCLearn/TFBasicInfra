@@ -453,11 +453,13 @@ variable "rediscachelist" {
 
 
 
+
 variable "wincstvmlist"{
  type = map(object({
         size = string
        subnetname=string
        osimageid=string
+       type=string//presentation,inrule, coris, sql, brst,jumpbox
         logdisks =optional(number)
         logdiskname=optional(string)
         datadisk=optional(number)
@@ -477,10 +479,12 @@ variable "lincstvmlist"{
         size = string
        subnetname=string
        osimageid=string
+       type=string
        
     }))
     default={}
 }
+
  
 variable "wingenlist" {
   type        = map(any)

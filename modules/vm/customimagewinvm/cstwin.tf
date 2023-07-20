@@ -12,32 +12,48 @@ resource "azurerm_network_interface" "appbackend-nic" {
 }
 
 resource "azurerm_network_interface_application_security_group_association" "asgsqlserverassoc" {
-    for_each = var.wincstvmlist
+    
+    for_each = {
+    for k, v in var.wincstvmlist : k => v
+    if v.type=="sql"
+  }
   network_interface_id          =azurerm_network_interface.appbackend-nic[each.key].id
   application_security_group_id = var.asgsqlserverid
 }
 
 
 resource "azurerm_network_interface_application_security_group_association" "asgjmpboxassoc" {
-    for_each = var.wincstvmlist
-  network_interface_id          =azurerm_network_interface.appbackend-nic[each.key].id
+     for_each = {
+    for k, v in var.wincstvmlist : k => v
+    if v.type=="jumpbox"
+  }
+  network_interface_id  =azurerm_network_interface.appbackend-nic[each.key].id
   application_security_group_id = var.asgjmpserversid
 }
 
 resource "azurerm_network_interface_application_security_group_association" "asgwinpresboxassoc" {
-    for_each = var.wincstvmlist
+     for_each = {
+    for k, v in var.wincstvmlist : k => v
+    if v.type=="presentation"
+  }
   network_interface_id          =azurerm_network_interface.appbackend-nic[each.key].id
   application_security_group_id = var.asgwebserversid
 }
 
 resource "azurerm_network_interface_application_security_group_association" "asgwinbrstassoc" {
-    for_each = var.wincstvmlist
+   for_each = {
+    for k, v in var.wincstvmlist : k => v
+    if v.type=="brst"
+  }
   network_interface_id          =azurerm_network_interface.appbackend-nic[each.key].id
   application_security_group_id = var.asgbrstserversid
 }
 
 resource "azurerm_network_interface_application_security_group_association" "asgwincorrisassoc" {
-    for_each = var.wincstvmlist
+      for_each = {
+    for k, v in var.wincstvmlist : k => v
+    if v.type=="coris"
+  }
   network_interface_id          =azurerm_network_interface.appbackend-nic[each.key].id
   application_security_group_id = var.asgcorrisserversid
 }

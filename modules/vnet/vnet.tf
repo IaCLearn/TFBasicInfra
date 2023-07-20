@@ -154,8 +154,9 @@ resource "azurerm_network_security_group" "nsg_sql" {
   destination_port_range      = "3389"
   source_address_prefix    = var.mrz_subnet_address_prefix
   //destination_address_prefix  = "*"
-  destination_application_security_group_ids =[azurerm_application_security_group.asgwebservers.id]
+  destination_application_security_group_ids =[azurerm_application_security_group.asgsqlservers.id]
   }
+  depends_on = [azurerm_subnet.db_subnet, azurerm_subnet.dbbi_subnet]
 }
 
 
@@ -187,6 +188,7 @@ resource "azurerm_network_security_group" "nsg_presentation" {
   destination_application_security_group_ids =[azurerm_application_security_group.asgwebservers.id]
 
   }
+  depends_on = [ azurerm_subnet.app_subnet ]
 }
 
 resource "azurerm_network_security_group" "nsg_coris" {
@@ -205,6 +207,7 @@ resource "azurerm_network_security_group" "nsg_coris" {
   destination_application_security_group_ids =[azurerm_application_security_group.asgcorisservers.id]
 
   }
+  depends_on = [ azurerm_subnet.appgw_subnet ]
 }
 
 resource "azurerm_network_security_group" "nsg_appbrst" {
@@ -236,6 +239,8 @@ resource "azurerm_network_security_group" "nsg_appbrst" {
   destination_application_security_group_ids =[azurerm_application_security_group.asgbrstservers.id]
 
   }
+
+  depends_on = [ azurerm_subnet.appbrst_subnet ]
 }
 
 
@@ -254,6 +259,7 @@ resource "azurerm_network_security_group" "nsg_jumbpox" {
   source_address_prefix    = var.appgw_subnet_address_prefix
     destination_application_security_group_ids =[azurerm_application_security_group.asgjmpservers.id]
   }
+  depends_on = [ azurerm_subnet.mrz_subnet ]
 }
 
 resource "azurerm_network_security_group" "nsg_inrule" {
@@ -283,7 +289,7 @@ resource "azurerm_network_security_group" "nsg_inrule" {
   destination_application_security_group_ids =[azurerm_application_security_group.asginruleservers.id]
 
   }
-  
+  depends_on = [ azurerm_subnet.inrule_subnet ]
 }
 
 
@@ -331,7 +337,7 @@ resource "azurerm_subnet_network_security_group_association" "nsg_appbrst" {
   network_security_group_id = azurerm_network_security_group.nsg_appbrst.id
 
   depends_on = [
-    azurerm_subnet.app_subnet, azurerm_network_security_group.nsg_appbrst
+    azurerm_subnet.appbrst_subnet, azurerm_network_security_group.nsg_appbrst
   ]
 }
 

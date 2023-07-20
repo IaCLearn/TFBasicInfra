@@ -57,17 +57,17 @@ depends_on = [ module.vnet_md ]
 }
 
 #module to create storage account depends on private dns zones module
-# module "stgaccount_md" {
-#   source = "./modules/storageaccounts"
-#   storage_list = var.storage_list
-#   containers_list = var.containers_list
-#   existingrgname = module.resourcegroup_md.apprgname
-#    endpoints_subnet_id = module.vnet_md.pe_subnet_id
-# stg_private_dns_zone_ids = module.privatednszones_md.privatednszoneidstorageid
+module "stgaccount_md" {
+  source = "./modules/storageaccounts"
+  storage_list = var.storage_list
+  containers_list = var.containers_list
+  existingrgname = module.resourcegroup_md.apprgname
+   endpoints_subnet_id = module.vnet_md.pe_subnet_id
+stg_private_dns_zone_ids = module.privatednszones_md.privatednszoneidstorageid
  
-#  depends_on = [module.privatednszones_md]
+ depends_on = [module.privatednszones_md]
   
-# }
+}
 
 #generic windows vm module, uncomment out if needed
 # module "vm_md" {
@@ -141,7 +141,7 @@ depends_on = [module.cstwinvm_md,module.privatednszones_md]
     module "cstwinvm_md"{
     source ="./modules/vm/customimagewinvm"
     appbkendvmrg_name = module.resourcegroup_md.apprgname
-    existingappbkendsnetid=module.vnet_md.appbrst_subnet_id
+    existingappbkendsnetid=module.vnet_md.appbkend_subnet_id
     existingappsnetid=module.vnet_md.app_subnet_id
     existingdbsnetid=module.vnet_md.db_subnet_id
     existingdbbisnetid = module.vnet_md.dbbi_subnet_id

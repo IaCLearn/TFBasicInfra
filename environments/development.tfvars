@@ -77,10 +77,10 @@ sku_name="Standard"
 rediscachelist=["errovam002"]
 
 #Azure Storage Account Configuration variables
-storage_list=["shols001","shols002","shols003"]
+storage_list=["csdcoms101st","csdcoms102st","csdcoms103st"]
 containers_list=[{ name = "sa1container1", access_type = "private" }]
 
-#Azure Resource Groups
+#Azure Resource Groups using resource group module
 resource_groups=[
 {
       id = 1
@@ -102,7 +102,7 @@ resource_groups=[
 ]
 
 
-# SQL VM General creation using the sql market place image and with the SQL Module
+# SQL VM General creation using the sql market place image and with the SQL Module in the SQL Module
 apprg_name="sqlvmsrg"
 publisher_sql="MicrosoftSQLServer"
 offer_sql="sql2019-ws2019"
@@ -115,7 +115,7 @@ sqladminpwd="Longstrokes13$$"
 sqllogfilepath="F:\\Logs"
 sqldatafilepath="G:\\Data"
 
-#SQL VM List 
+#SQL VM List add more list if required
 sqlvmlist={
   sqlvm01={
     size="Standard_D8ds_v4",
@@ -139,6 +139,7 @@ brstvmrg_name="sqlvmsrg"
 #customlinux vm list
 lincstvmlist={
 csDcOms1Web02vm={
+  type="presentation"
    size="Standard_D8ds_v4",
     subnetname="appsnet"
     osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/cstlinuxvm/versions/0.0.1"
@@ -146,10 +147,11 @@ csDcOms1Web02vm={
 
 }
 
-#Azure Custom Windows variables
+#Azure Custom Windows , add more list if required
 appbkendvmrg_name="sqlvmsrg"
 wincstvmlist={
 csDcOms1Jmp01vm={
+  type="jumpbox"
     size="Standard_D8ds_v4",
     subnetname="mrzsnet"
     osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
@@ -157,6 +159,7 @@ csDcOms1Jmp01vm={
  }
 
  csDcOms1Web01vm={
+   type="presentation"
   installIIS=true
     size="Standard_D8ds_v4",
     subnetname="appsnet"
@@ -164,17 +167,20 @@ csDcOms1Jmp01vm={
 
  }
   csDcOms1Svc01vm={
+    type="coris"
     size="Standard_D8ds_v4",
     subnetname="corissnet"
     osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
   }
    csDcOms1Svc02vm={
+    type="brst"
     size="Standard_D8ds_v4",
     subnetname="appbrstsnet"
     logdisks=120
     osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
   }
   csDcOms1Sql01vm={
+     type="sql"
     size="Standard_D8ds_v4",
     subnetname="dbsnet"
       logdisks=80
@@ -183,6 +189,7 @@ csDcOms1Jmp01vm={
       osimageid="/subscriptions/10c1c1c4-c34c-4a6f-b4bd-8560ab234169/resourceGroups/ADDomain/providers/Microsoft.Compute/galleries/cstvmgallery/images/newindef1/versions/0.0.1"
   }
     csDcOms1Sql04vm={
+        type="sql"
     size="Standard_D8ds_v4",
     subnetname="dbbisnet"
     logdisks=120
@@ -192,7 +199,7 @@ csDcOms1Jmp01vm={
   }
 }
 
-#Windows generic list add more list if required
+#Windows generic list add more list if required using the windows generic module
 wingenlist={
 
 wingem01={

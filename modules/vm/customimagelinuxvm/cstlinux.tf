@@ -32,7 +32,11 @@ resource "azurerm_linux_virtual_machine" "webbfevms" {
 
 
 resource "azurerm_network_interface_application_security_group_association" "asglinpresboxassoc" {
-    for_each = var.lincstvmlist
+   for_each = {
+    for k, v in var.lincstvmlist : k => v
+    if v.type=="presentation"
+  }
+  
   network_interface_id          =azurerm_network_interface.webbfe-nic[each.key].id
   application_security_group_id = var.asgwebserversid
 }

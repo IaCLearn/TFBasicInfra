@@ -36,11 +36,13 @@ description="VM user pass"
 }
 
 
+
 variable "lincstvmlist"{
  type = map(object({
         size = string
        subnetname=string
        osimageid=string
+       type=string
        
     }))
     default={}
